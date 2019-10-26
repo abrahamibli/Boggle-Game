@@ -1,4 +1,4 @@
-# boogle_game
+# boggle_game
 
 A new Flutter project.
 
