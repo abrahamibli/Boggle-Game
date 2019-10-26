@@ -28,7 +28,7 @@ class Nodo {
         line = removeDiacritics(line);
         for(int pos=0;pos<line.length;pos++)
           if(line[pos] == 'ñ') line.replaceFirst(RegExp('ñ'), 'n', pos);
-        //print(line);
+        print(line);
         this.insertar(line);
         //print("\nPalabra '$line' insertada");
         Nodo.tam = 0;
@@ -289,7 +289,7 @@ class Boogle {
   }
 }
 
-void main() async{
+/*void main() async{
   //Inicializando variables y trie con diccionario
   Nodo trie = Nodo();
   await trie.inicializar("../dic/diccionario.txt");
@@ -321,4 +321,4 @@ void main() async{
         print('**Opcion Incorrecta**');
     }
   }while(opc!=2);
-}
+}*/
