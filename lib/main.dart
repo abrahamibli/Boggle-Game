@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
         primaryColor: Color.fromARGB(255, 169, 210, 249), //800
         accentColor: Colors.lightBlue[800], //cyan[600]
       ),
-      //home: MenuScreen(title: 'Boggle Game'),
       routes: {
         '/': (context) => MenuScreen(),
         '/game': (context) => GameScreen()

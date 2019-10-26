@@ -13,10 +13,10 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void initState() {
+    super.initState();
     tablero = Tablero();
     tablero.crearTableroNuevo();
     //initTrie();
-    super.initState();
   }
 
   /*initTrie() async{
@@ -33,18 +33,42 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
+              color: Theme.of(context).accentColor,
+              width: 35,
+              height: 35,
+              child: Center(
+                child: IconButton(
+                  color: Colors.white,
+                  icon: Icon(
+                    Icons.autorenew,
+                  ),
+                  iconSize: 20,
+                  tooltip: "restart table",
+                  onPressed: () {
+                    print("click it");
+                    setState(() {
+                     tablero.crearTableroNuevo(); 
+                    });
+                  },
+                ),
+              ),
+            ),
+            Container(
               width: 250,
-              height: 275,
+              height: 250,
               child: Board(
                 boardData: tablero.getTablero(),
               ),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  topLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
                 ),
               ),
             ),
@@ -90,7 +114,6 @@ class Board extends StatelessWidget {
           ),
         );
       }),
-      mainAxisSpacing: 6,
     );
   }
 }

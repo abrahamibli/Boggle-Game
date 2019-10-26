@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/services.dart';
 
 class MenuScreen extends StatefulWidget {
   MenuScreen({Key key}) : super(key: key);
@@ -47,7 +48,7 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
               onPressed: () {
                 print('salir');
-                exit(0);
+                SystemNavigator.pop();
               },
               shape: StadiumBorder(),
               elevation: 20,
