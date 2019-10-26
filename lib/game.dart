@@ -24,19 +24,8 @@ class _GameScreenState extends State<GameScreen> {
     trie = Nodo();
     tablero.crearTableroNuevo();
     user_string = "";
-    initTrie();
+    trie.inicializar();
     //print(trie.buscar("mapa"));
-  }
-
-  initTrie() async {
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
-
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    print(appDocPath);
-    //String filePath = '${appDocDir.path}/diccionario.txt';
-    //await trie.inicializar(filePath);
   }
 
   verificarPalabra(String palabra) {
@@ -156,8 +145,8 @@ class Board extends StatelessWidget {
       children: List.generate(25, (index) {
         return Center(
           child: Container(
-            width: 35,
-            height: 35,
+            width: 37,
+            height: 37,
             alignment: Alignment.center,
             child: Text(
               '${boardData[index]}',

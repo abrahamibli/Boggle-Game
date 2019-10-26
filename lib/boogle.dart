@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:diacritic/diacritic.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 
 class Nodo {
@@ -17,20 +18,18 @@ class Nodo {
     rutas = List<Nodo>(32);
   }
 
-  void inicializar(String ruta) async {
-    var file = File(ruta);
-    Stream<List<int>> inputStream = file.openRead();
-    var lines = Utf8Decoder(allowMalformed: true).bind(inputStream).transform(LineSplitter());
-    //utf8.decoder
+  void inicializar() async {
+    String file = await rootBundle.loadString('assets/dic/diccionario.txt');
+    List<String> lines = file.split('\n');
     try {
-      await for(var line in lines) {
+      for(int i=0;i<lines.length; i++) {
         //print('$line tiene ${line.length} caracteres');
-        line = removeDiacritics(line);
-        for(int pos=0;pos<line.length;pos++)
-          if(line[pos] == 'ñ') line.replaceFirst(RegExp('ñ'), 'n', pos);
-        print(line);
-        this.insertar(line);
-        //print("\nPalabra '$line' insertada");
+        lines[i] = removeDiacritics(lines[i]);
+        for(int pos=0;pos<lines[i].length;pos++)
+          if(lines[i][pos] == 'ñ') lines[i].replaceFirst(RegExp('ñ'), 'n', pos);
+        print(lines[i]);
+        this.insertar(lines[i]);
+        //print("\nPalabra '$lines[i]' insertada");
         Nodo.tam = 0;
       }
       //print('Archivo cerrado');
