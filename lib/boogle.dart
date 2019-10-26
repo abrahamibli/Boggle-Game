@@ -21,21 +21,27 @@ class Nodo {
   void inicializar() async {
     String file = await rootBundle.loadString('assets/dic/diccionario.txt');
     List<String> lines = file.split('\n');
-    try {
-      for(int i=0;i<lines.length; i++) {
+
+    for (String line in lines) {
+      print(line);
+      insertar(line);
+    }
+
+    /*try {
+      for(int i=0; i<lines.length; i++) {
         //print('$line tiene ${line.length} caracteres');
         lines[i] = removeDiacritics(lines[i]);
-        for(int pos=0;pos<lines[i].length;pos++)
+        for(int pos=0; pos<lines[i].length; pos++)
           if(lines[i][pos] == 'ñ') lines[i].replaceFirst(RegExp('ñ'), 'n', pos);
         print(lines[i]);
-        this.insertar(lines[i]);
-        //print("\nPalabra '$lines[i]' insertada");
+        //this.insertar(lines[i]);
+        print("\nPalabra '$lines[i]' insertada");
         Nodo.tam = 0;
       }
       //print('Archivo cerrado');
     }catch(e) {
       print(e);
-    }
+    }*/
   }
 
   bool estaVacio() {

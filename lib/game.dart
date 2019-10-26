@@ -25,7 +25,7 @@ class _GameScreenState extends State<GameScreen> {
     tablero.crearTableroNuevo();
     user_string = "";
     trie.inicializar();
-    //print(trie.buscar("mapa"));
+    print(trie.buscar("mapa"));
   }
 
   verificarPalabra(String palabra) {
