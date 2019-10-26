@@ -188,8 +188,15 @@ class Tablero {
   List<List<String>> letras = List<List<String>>(tamx);
   final String abc = 'aabcdeefghiijklmnoopqrstuuvwxyz';
 
-  List<List<String>> getTablero() {
-    return letras;
+  String getTablero() {
+    StringBuffer buffer = StringBuffer();
+
+    for(List<String> l in letras) {
+      for(String s in l) {
+        buffer.write(s);
+      }
+    }
+    return buffer.toString();
   }
 
   //Tablero random nuevo
