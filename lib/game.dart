@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'boogle.dart';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 
 class GameScreen extends StatefulWidget {
   @override
@@ -10,19 +8,20 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  static int nTablero = 1, puntos = 0;
+  static int nTablero, puntos;
   int puntosGanados;
   Nodo trie;
   Tablero tablero;
   String user_string;
-  double visi = 0.0;
+  double visi;
   final TextEditingController text_field_clean = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    visi = 0.0;
     puntos = 0;
-    nTablero = 0;
+    nTablero = 1;
     tablero = Tablero();
     trie = Nodo();
     tablero.crearTableroNuevo();
@@ -44,7 +43,6 @@ class _GameScreenState extends State<GameScreen> {
             puntos += puntosGanados;
             print("Palabra correcta!...");
             visi = 1.0;
-            //visi = 0.0;
             encontrado = true;
           }
           Nodo.tam = 0;
@@ -71,7 +69,6 @@ class _GameScreenState extends State<GameScreen> {
           ],
           mainAxisSize: MainAxisSize.max,
         ),
-        //title: Text('Tablero $nTablero        Puntos $puntos'),
         elevation: 0,
       ),
       body: Center(
@@ -152,9 +149,6 @@ class _GameScreenState extends State<GameScreen> {
                     print(in_string);
                     verificarPalabra(in_string);
                   });
-                  /*print(in_string);
-                  verificarPalabra(in_string);
-                  Text(in_string);*/
                 },
               ),
             ),
@@ -242,6 +236,7 @@ class EndScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
+                elevation: 20,
                 label: Text('Regresar al Menu Principal', style: Theme.of(context).textTheme.button.copyWith(fontSize: 20)),
                 icon: Icon(Icons.arrow_back),
                 shape: StadiumBorder(),

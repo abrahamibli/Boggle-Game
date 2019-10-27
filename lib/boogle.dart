@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -24,20 +22,15 @@ class Nodo {
 
     try {
       for (String line in lines) {
-        //print('$line tiene ${line.length} caracteres');
         line = removeDiacritics(line);
         for(int pos=0;pos<line.length;pos++)
           if(line[pos] == 'ñ') line.replaceFirst(RegExp('ñ'), 'n', pos);
-        //print(line);
         this.insertar(line);
-        //print(this.buscar("mapa"));
-        //print("\nPalabra '$line' insertada");
         Nodo.tam = 0;
       }
     }catch(e) {
       print(e);
     }
-    print(this.buscar("mapa"));
   }
 
   bool estaVacio() {
@@ -117,68 +110,6 @@ class Nodo {
     return i;
   }
 
-  List<String> autoCompletar(String prefijo) {
-    Nodo trieX = this;
-    List<String> lista = List<String>(); 
-    int cual;
-
-    for(int i = 0; i < prefijo.length; i++) {
-      cual = indice(prefijo[i]);
-      if(trieX.rutas[cual] == null)
-        return lista;
-      trieX = trieX.rutas[cual]; 
-    }
-
-    prefijo = prefijo.substring(0, prefijo.length-1);
-    return trieX.todosLosPrefijos(lista, prefijo, trieX);
-  }
-
-  List<String> todosLosPrefijos(List<String> lista, String prefijo, Nodo nodoX) {
-    if(nodoX.fin) {
-      prefijo = "$prefijo${nodoX.letra}";
-      lista.add(prefijo);
-    }else {
-      prefijo = "$prefijo${nodoX.letra}";
-    }
-
-    for(Nodo nodo in nodoX.rutas) {
-      if(nodo != null) {
-        todosLosPrefijos(lista, prefijo, nodo);
-      }
-    }
-    
-    return lista;
-    
-  }
-
-  void eliminar(String palabra) {
-    int cual, i = 0, avance_trie = 0;
-    String sig_letra = palabra[0];
-    Nodo trieX = this, aux = this;
-
-    do { 
-      cual = indice(palabra[i]); 
-      trieX = trieX.rutas[cual];
-      i++;
-      avance_trie++;
-      if(avance_trie == palabra.length) {
-        if(!trieX.estaVacio()) {
-          aux = trieX;
-          sig_letra = null;
-        }
-      }else if(trieX.cantidadDeHijos() > 1 || trieX.fin) {
-        aux = trieX;
-        sig_letra = palabra[i];
-      }
-    }while(i < palabra.length);
-
-    if(sig_letra != null || aux == this) {
-      cual = indice(sig_letra[0]);
-      aux.rutas[cual] = null;
-    }else 
-      aux.fin = false;
-  }
-
   String toString() => "Letra: $letra | $fin";
 
 }
@@ -218,19 +149,6 @@ class Tablero {
     numTab++;
   }
 
-  //Imprimir tablero en pantalla
-  imprimir(int puntos) {
-    //Limpiar terminal
-    print('\x1B[2J\x1B[0;0H');
-    print('--------------------- NIVEL $numTab ---------------------  Puntos: $puntos\n');
-    for(int i=0;i<tamx;i++) {
-      for(int j=0;j<tamy;j++) {
-        stdout.write(letras[i][j] + '\t');
-      }
-      print('\n');
-    }
-  }
-
   bool palabraExiste(String palabra, int pos, int x, int y) {
     if(pos==palabra.length) return true;
     if(letras[x][y] != palabra[pos]) return false;
@@ -247,79 +165,3 @@ class Tablero {
     return false;
   }
 }
-
-class Boogle {
-  Tablero tablero;
-  Nodo trie;
-
-  Boogle(this.trie) {
-    tablero = Tablero();
-  }
-
-  nuevaPartida() {
-    String palabras; 
-    int puntos=0;
-    Nodo donde;
-    bool encontrado;
-    do{
-      tablero.crearTableroNuevo();
-      tablero.imprimir(puntos);
-      print('\n\nPalabras Encontradas: ');
-      do {
-        encontrado = false;
-        palabras = stdin.readLineSync();
-        for(int i=0;i<Tablero.tamx;i++) {
-          for(int j=0;j<Tablero.tamy;j++) {
-              if(tablero.palabraExiste(palabras, 0, i, j)){
-                donde = trie.buscar(palabras);
-                if((palabras.length == Nodo.tam) && donde.fin) {
-                  puntos+=25;
-                  print("Palabra correcta!... Ganaste 25 puntos");
-                  encontrado=true;
-                }
-                Nodo.tam = 0;
-              }
-          }
-        }
-        if(!encontrado) {
-          print("Palabra no existe!... Ganaste 0 puntos");
-        }
-      }while(!encontrado);
-      stdin.readLineSync();
-    }while(puntos!=100);
-  }
-}
-
-/*void main() async{
-  //Inicializando variables y trie con diccionario
-  Nodo trie = Nodo();
-  await trie.inicializar("../dic/diccionario.txt");
-  Boogle boogle = Boogle(trie);
-  int opc;
-
-  //Menu principal
-  do{
-    //Limpiar terminal
-    print('\x1B[2J\x1B[0;0H');
-    print('-------------- BOOGLE MENU PRINCIPAL --------------\n');
-    print('1) Nueva Partida');
-    print('2) Salir');
-    stdout.write('OPCION: ');
-    opc = int.parse(stdin.readLineSync());
-
-    switch(opc) {
-      //Nueva Partida
-      case 1:
-        boogle.nuevaPartida();
-        break;
-      case 2:
-        break;
-      case 69:
-        print("lol nice lmao gg\n");
-        print(trie.buscar(stdin.readLineSync()));
-        break;
-      default:
-        print('**Opcion Incorrecta**');
-    }
-  }while(opc!=2);
-}*/
