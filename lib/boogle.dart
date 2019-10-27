@@ -22,26 +22,22 @@ class Nodo {
     String file = await rootBundle.loadString('assets/dic/diccionario.txt');
     List<String> lines = file.split('\n');
 
-    for (String line in lines) {
-      print(line);
-      insertar(line);
-    }
-
-    /*try {
-      for(int i=0; i<lines.length; i++) {
+    try {
+      for (String line in lines) {
         //print('$line tiene ${line.length} caracteres');
-        lines[i] = removeDiacritics(lines[i]);
-        for(int pos=0; pos<lines[i].length; pos++)
-          if(lines[i][pos] == 'ñ') lines[i].replaceFirst(RegExp('ñ'), 'n', pos);
-        print(lines[i]);
-        //this.insertar(lines[i]);
-        print("\nPalabra '$lines[i]' insertada");
+        line = removeDiacritics(line);
+        for(int pos=0;pos<line.length;pos++)
+          if(line[pos] == 'ñ') line.replaceFirst(RegExp('ñ'), 'n', pos);
+        //print(line);
+        this.insertar(line);
+        //print(this.buscar("mapa"));
+        //print("\nPalabra '$line' insertada");
         Nodo.tam = 0;
       }
-      //print('Archivo cerrado');
     }catch(e) {
       print(e);
-    }*/
+    }
+    print(this.buscar("mapa"));
   }
 
   bool estaVacio() {

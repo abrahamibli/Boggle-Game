@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => MenuScreen(),
-        '/game': (context) => GameScreen()
+        '/game': (context) => GameScreen(),
+        '/end' : (context) => EndScreen()
       },
       initialRoute: '/',
     );
