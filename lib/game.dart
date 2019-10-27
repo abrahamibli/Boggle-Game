@@ -21,6 +21,8 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
+    puntos = 0;
+    nTablero = 0;
     tablero = Tablero();
     trie = Nodo();
     tablero.crearTableroNuevo();
