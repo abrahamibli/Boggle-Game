@@ -1,3 +1,10 @@
+/**
+* Juego "Boggle" con implementacion de Tries y diccionarios.
+* By Uriel Omar Gonzalez 320736
+* By Abraham Ibarra Linares 320861
+* UACH Facultad de Ingenieria
+*/
+
 import 'package:boggle_game/game.dart';
 import 'package:boggle_game/menu.dart';
 import 'package:flutter/material.dart';
