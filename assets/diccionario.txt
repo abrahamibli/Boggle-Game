@@ -42006,7 +42006,6 @@ güisquilar
 güito
 gúmena
 güérmeces
-h
 ha
 haba
 habado
@@ -43996,7 +43995,6 @@ húmil
 húmilmente
 húngaro
 húsar
-i
 iatrogénico
 ibaguereño
 ibarreño
@@ -46914,7 +46912,6 @@ iónico
 ístmico
 ítalo
 ítem
-j
 ja
 jaba
 jabado
@@ -47731,7 +47728,6 @@ júbilo
 júcaro
 júnceo
 júnior
-k
 ka
 kafkiano
 kaki
@@ -47803,7 +47799,6 @@ káiser
 kárate
 kárstico
 kéfir
-l
 la
 labe
 labeo
@@ -50004,7 +49999,6 @@ lúpulo
 lústrico
 lútea
 lúteo
-m
 mable
 mabolo
 mabí
@@ -54785,7 +54779,6 @@ músculo
 música
 músico
 mútilo
-A
 Abraham
 Acates
 Acuario
@@ -54829,7 +54822,6 @@ Atlante
 Avesta
 Azul
 AArónico
-B
 Babia
 Babilonia
 Babá
@@ -54854,7 +54846,6 @@ Briján
 Bueno
 Bálteo
 Bárbara
-C
 Cabo
 Cabra
 Calabar
@@ -54901,7 +54892,6 @@ Cupido
 Cáncer
 Cástor
 César
-D
 Daimiel
 Damocles
 David
@@ -54912,7 +54902,6 @@ Diana
 Diesel
 Dorado
 DNA
-E
 Eclíptica
 Edipo
 Egeria
@@ -54929,7 +54918,6 @@ Ester
 Etiopía
 Europa
 Eustaquio
-F
 Faetón
 Fahrenheit
 Falopio
@@ -54941,14 +54929,12 @@ Flandes
 Florencia
 Fraga
 Francia
-G
 Galiana
 Ge
 Gemonias
 Guernesey
 Géminis
 Génova
-H
 He
 Helena
 Helicón
@@ -54957,7 +54943,6 @@ Higuera
 Hinojosa
 Hércules
 Héspero
-I
 In
 India
 Inglaterra
@@ -54966,7 +54951,6 @@ Instituta
 Io
 Ir
 Islandia
-J
 Japón
 Jauja
 Jehová
@@ -54984,8 +54968,6 @@ Juan
 Juanelo
 Judea
 Júpiter
-K
-L
 La
 Labrador
 Leiden
@@ -54996,7 +54978,6 @@ Libra
 Ll
 Lucifer
 López
-M
 Macabeo
 Mach
 Madrid
@@ -55021,7 +55002,6 @@ Morfeo
 Moro
 Morse
 México
-N
 Na
 Natividad
 Navidad
@@ -55029,11 +55009,9 @@ Ne
 Neptuno
 Ni
 Noé
-O
 Oceánidas
 Olimpo
 Os
-P
 Pablo
 Paco
 Palencia
@@ -55058,15 +55036,11 @@ Platón
 Polonia
 Proteo
 Prusia
-Pu
 Purísima
 Pórtland
-Q
 Quico
 Quintín
 Quío
-R
-Re
 Rea
 Rebeca
 Remo
@@ -55083,7 +55057,6 @@ Roque
 Rota
 Rubicón
 Rusia
-S
 Sagitario
 Sajonia
 Salamanca
@@ -55094,12 +55067,9 @@ Santiago
 Satanás
 Saturno
 Satán
-Se
 Seltz
 Si
 Sirio
-T
-Ta
 Tauro
 Te
 Temple
@@ -55114,9 +55084,7 @@ Troya
 Tule
 Tántalo
 Túnez
-U
 Urías
-V
 Varolio
 Veda
 Vega
@@ -55128,15 +55096,9 @@ Vicente
 Vidriera
 Villadiego
 Virgo
-W
-X
-Y
-Z
 Zendavesta
 Zodiaco
 Zodíaco
-n
-na
 naba
 nabab
 nababo
@@ -56298,7 +56260,6 @@ núbil
 núcleo
 número
 númida
-o
 oasis
 oaxaqueño
 obcecación
@@ -57593,7 +57554,6 @@ oíslo
 óvolo
 óvulo
 óxido
-p
 pabellón
 pabilo
 pabiloso
@@ -64192,7 +64152,6 @@ púnico
 púrpura
 pústula
 pútrido
-q
 quark
 que
 quebracho
@@ -64626,7 +64585,6 @@ quíntuplo
 quío
 quístico
 quórum
-r
 raba
 rabada
 rabadilla
@@ -68733,7 +68691,6 @@ rúnico
 rústicamente
 rústico
 rútilo
-s
 sabadellense
 sabadeño
 sabadiego
@@ -72860,8 +72817,6 @@ súplica
 súrbana
 súrculo
 súrtuba
-t
-ta
 taba
 tabacal
 tabacalero
@@ -77204,7 +77159,6 @@ túrdulo
 túrgido
 túrmix
 tútano
-u
 ubajay
 ube
 ubetense
@@ -79383,7 +79337,6 @@ vómer
 vómico
 vómito
 vórtice
-w
 wagneriano
 washingtoniano
 waterpolista
@@ -79405,7 +79358,6 @@ wolframio
 wéber
 wélter
 wólfram
-x
 xantoma
 xenofobia
 xenófobo
@@ -79434,7 +79386,6 @@ xilófago
 xilófono
 xilógrafo
 xilórgano
-y
 ya
 yaacabó
 yaba
@@ -79636,7 +79587,6 @@ yáquil
 yátaro
 yérsey
 yóquey
-z
 za
 zabalmedina
 zabarcera

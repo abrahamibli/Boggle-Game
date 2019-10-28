@@ -28,7 +28,7 @@ class _GameScreenState extends State<GameScreen> {
     puntos = 0;
     puntosGanados = 0;
     nTablero = 1;
-    nDiccionario = 80307;
+    nDiccionario = 80257;
     encontradas = List<String>();
     tablero = Tablero();
     trie = Nodo();
@@ -276,7 +276,7 @@ class EndScreen extends StatelessWidget {
             SizedBox(height: 10,),
             /// Container que imprime el numero de palabras faltantes a encontrar en el diccionario
             Container(
-              child: Text('${_GameScreenState.nDiccionario} faltantes de encontrar en el diccionario...', style: Theme.of(context).textTheme.display1.copyWith(fontSize: 15), )
+              child: Text('${_GameScreenState.nDiccionario} palabras faltantes de encontrar...', style: Theme.of(context).textTheme.display1.copyWith(fontSize: 15), )
             ),
             /// Caja vacia con altura de 40 p
             SizedBox(height: 40,),

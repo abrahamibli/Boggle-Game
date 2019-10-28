@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/services.dart' show rootBundle; // Libreria para permitir lectura del archivo presente en assets
@@ -21,7 +22,8 @@ class Nodo {
   /// e inicializa el trie con todas las palabras
   void inicializar() async {
     String file = await rootBundle.loadString('assets/dic/diccionario.txt');
-    List<String> lines = file.split('\n');
+    LineSplitter ls = LineSplitter();
+    List<String> lines = ls.convert(file);
 
     try {
       for (String line in lines) {
@@ -31,8 +33,8 @@ class Nodo {
         this.insertar(line);
         Nodo.tam = 0;
       }
-    }catch(e) {
-      print(e);
+    }catch(e, stackTrace) {
+      print(stackTrace);
     }
   }
 
