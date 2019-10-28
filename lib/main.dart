@@ -2,25 +2,28 @@ import 'package:boggle_game/game.dart';
 import 'package:boggle_game/menu.dart';
 import 'package:flutter/material.dart';
 
+/// Ejecuta la Boggle App
 void main() => runApp(MyApp());
 
+/// Controla las 3 diferentes pantallas de la App y 
+/// define el diseño base
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Boggle Game',
+      title: 'Boggle Game .AU.',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      theme: ThemeData( // Tema base
         brightness: Brightness.dark,
         primaryColor: Color.fromARGB(255, 169, 210, 249), //800
         accentColor: Colors.lightBlue[800], //cyan[600]
       ),
       routes: {
-        '/': (context) => MenuScreen(),
-        '/game': (context) => GameScreen(),
-        '/end' : (context) => EndScreen()
+        '/': (context) => MenuScreen(), // Pantalla Inicial del juego
+        '/game': (context) => GameScreen(), // Pantalla que muestra el tablero y la interaccion don el usuario
+        '/end' : (context) => EndScreen() // Pantalla que muestra los resultados
       },
-      initialRoute: '/',
+      initialRoute: '/', // Define el Menu como la pantalla principal
     );
   }
 }
