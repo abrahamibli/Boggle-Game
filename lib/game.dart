@@ -8,11 +8,12 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  static int nTablero, puntos;
+  static int nTablero, puntos, nDiccionario;
   int puntosGanados;
   Nodo trie;
   Tablero tablero;
   String user_string;
+  List<String> encontradas;
   double visi;
   final TextEditingController text_field_clean = TextEditingController();
 
@@ -21,7 +22,10 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
     visi = 0.0;
     puntos = 0;
+    puntosGanados = 0;
     nTablero = 1;
+    nDiccionario = 80307;
+    encontradas = List<String>();
     tablero = Tablero();
     trie = Nodo();
     tablero.crearTableroNuevo();
@@ -39,17 +43,23 @@ class _GameScreenState extends State<GameScreen> {
         if (tablero.palabraExiste(palabra, 0, i, j)) {
           donde = trie.buscar(palabra);
           if ((palabra.length == Nodo.tam) && donde.fin) {
-            puntosGanados = 5 * palabra.length;
-            puntos += puntosGanados;
             print("Palabra correcta!...");
+            if(!encontradas.contains(palabra)) {
+              puntosGanados = 5 * palabra.length;
+              puntos += puntosGanados;
+              nDiccionario--;
+              encontradas.add(palabra);
+              encontrado = true;
+            }
             visi = 1.0;
-            encontrado = true;
           }
           Nodo.tam = 0;
         }
       }
     }
     if (!encontrado) {
+      puntosGanados = 0;
+      visi = 1.0;
       print("Palabra no existe!...");
     }
   }
@@ -78,7 +88,7 @@ class _GameScreenState extends State<GameScreen> {
             AnimatedOpacity(
               child: Container(
                 child: Text(
-                  'Has ganado $puntosGanados puntos!',
+                  '${puntosGanados>0? 'Correcto, has ganado $puntosGanados puntos!' : 'Incorrecta o repetida, 0 puntos :C'}',
                   style: Theme.of(context).textTheme.display1.copyWith(fontSize: 20,),
                 ),
               ),
@@ -108,6 +118,7 @@ class _GameScreenState extends State<GameScreen> {
                       print("click it");
                       setState(() {
                         nTablero++;
+                        encontradas.clear();
                         tablero.crearTableroNuevo();
                       });
                     },
@@ -229,6 +240,10 @@ class EndScreen extends StatelessWidget {
             ),
             Container(
               child: Text('puntos y ${_GameScreenState.nTablero} ${(_GameScreenState.nTablero == 1) ? 'tablero' : 'tableros'}', style: Theme.of(context).textTheme.display1,)
+            ),
+            SizedBox(height: 10,),
+            Container(
+              child: Text('${_GameScreenState.nDiccionario} faltantes de encontrar en el diccionario...', style: Theme.of(context).textTheme.display1.copyWith(fontSize: 15), )
             ),
             SizedBox(height: 40,),
             Container(
