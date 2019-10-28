@@ -277,7 +277,7 @@ class EndScreen extends StatelessWidget {
             /// Container del boton que nos envia al menu principal
             Container(
               child: RaisedButton.icon(
-                /// Nos dirije a la pantalla inicial del juego
+                /// Nos dirige a la pantalla inicial del juego
                 onPressed: () {
                   Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
