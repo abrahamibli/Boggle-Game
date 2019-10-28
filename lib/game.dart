@@ -74,6 +74,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: Row(
@@ -126,7 +127,7 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                     iconSize: 20,
                     tooltip: "refrescar tablero",
-                    onPressed: () {
+                    onPressed: () {                    
                       print("click it");
                       /// incrementa variable [nTablero], y genera un tablero con
                       /// caracteres aleatorios nuevos
@@ -167,6 +168,11 @@ class _GameScreenState extends State<GameScreen> {
                   hintText: "Escribe tu palabra aqui",
                 ),
                 controller: text_field_clean,
+                /// se encarga de desaparecer el texto de cuando
+                /// el usuario inserta una palabra
+                onTap: () {
+                  visi = 0.0;
+                },
                 onSubmitted: (String in_string) {
                   /// Captura la cadena del usuario en la variable [user_string] y,
                   /// limpia el TextField posteriormente
