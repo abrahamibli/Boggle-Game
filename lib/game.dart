@@ -12,17 +12,14 @@ class GameScreen extends StatefulWidget {
 /// define el Widget que muestra los elementos principales del juego
 /// y de interaccion con el usuario
 class _GameScreenState extends State<GameScreen> {
-  static int nTablero,
-      puntos,
-      nDiccionario; // Numero de refrescos del tablero, puntos totales del usuario, numero de palabras en el diccionario
+  static int nTablero, puntos, nDiccionario; // Numero de refrescos del tablero, puntos totales del usuario, numero de palabras en el diccionario
   int puntosGanados; // Puntos parciales, multiplicador x5 cuando encuentra una palabra
   Nodo trie; // Nueva estructura trie
   Tablero tablero; // Nuevo Tablero
   String user_string; // Captura cadena escrita por el usuario en el TextField
   List<String> encontradas; // Lista palabras encontradas por el usuario
   double visi; // Controla animacion de texto cuando usuario encuentra palabra
-  final TextEditingController text_field_clean =
-      TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
+  final TextEditingController text_field_clean = TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
 
   @override
   void initState() {
@@ -249,6 +246,7 @@ class Board extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
+      physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 5,
       children: List.generate(25, (index) {
         return Center(
