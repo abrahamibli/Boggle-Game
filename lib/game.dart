@@ -324,7 +324,8 @@ class EndScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return Navigator.popAndPushNamed(context, '/');
+        Navigator.popUntil(context, ModalRoute.withName('/'));
+        return false;
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
@@ -411,16 +412,3 @@ class EndScreen extends StatelessWidget {
     );
   }
 }
-
-/*Future<bool> _willPopCallback() async {
-    return Navigator.canPop(context);
-}
-
-class _State extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _willPopCallback,
-    );
-  }
-}*/
