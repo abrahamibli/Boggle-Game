@@ -12,14 +12,17 @@ class GameScreen extends StatefulWidget {
 /// define el Widget que muestra los elementos principales del juego
 /// y de interaccion con el usuario
 class _GameScreenState extends State<GameScreen> {
-  static int nTablero, puntos, nDiccionario; // Numero de refrescos del tablero, puntos totales del usuario, numero de palabras en el diccionario
+  static int nTablero,
+      puntos,
+      nDiccionario; // Numero de refrescos del tablero, puntos totales del usuario, numero de palabras en el diccionario
   int puntosGanados; // Puntos parciales, multiplicador x5 cuando encuentra una palabra
   Nodo trie; // Nueva estructura trie
   Tablero tablero; // Nuevo Tablero
   String user_string; // Captura cadena escrita por el usuario en el TextField
   List<String> encontradas; // Lista palabras encontradas por el usuario
   double visi; // Controla animacion de texto cuando usuario encuentra palabra
-  final TextEditingController text_field_clean = TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
+  final TextEditingController text_field_clean =
+      TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
 
   @override
   void initState() {
@@ -93,8 +96,42 @@ class _GameScreenState extends State<GameScreen> {
         ),
         elevation: 0,
       ),
+      drawer: Theme(
+        data: Theme.of(context).copyWith(canvasColor: Theme.of(context).primaryColor),
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                height: 90,
+                child: DrawerHeader(
+                  child: Text(
+                    'Palabras Encontradas',
+                    style: Theme.of(context).textTheme.title.copyWith(color: Colors.black),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                      encontradas.length,
+                      (index) => Text(
+                            '- ${encontradas[index][0].toUpperCase() + encontradas[index].substring(1)}',
+                            style: Theme.of(context).textTheme.body2.copyWith(fontSize: 20),
+                          )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
-              child: Center(
+        child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -197,7 +234,8 @@ class _GameScreenState extends State<GameScreen> {
                   maxLength: 30,
                   decoration: InputDecoration(
                     hintText: "Escribe tu palabra aqui",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
                   ),
                   controller: text_field_clean,
 
@@ -284,87 +322,91 @@ class Board extends StatelessWidget {
 class EndScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope( 
+    return WillPopScope(
       onWillPop: () async {
         return Navigator.popAndPushNamed(context, '/');
       },
       child: Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            /// Container que muestra un texto simple
-            Container(
-              child: Text(
-                'Juego Finalizado!',
-                style:
-                    Theme.of(context).textTheme.display1.copyWith(fontSize: 42),
-              ),
-            ),
-
-            /// Caja vacia con altura de 40 p
-            SizedBox(
-              height: 40,
-            ),
-
-            /// Container que muestra texto simple
-            Container(
-              child: Text('con', style: Theme.of(context).textTheme.display1),
-            ),
-
-            /// Container que imprime el puntaje en el centro de la pantalla con una fuente grande
-            Container(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              /// Container que muestra un texto simple
+              Container(
                 child: Text(
-              '${_GameScreenState.puntos}',
-              style:
-                  Theme.of(context).textTheme.display4.copyWith(fontSize: 200),
-            )),
-
-            /// Container que imprime los tableros usados por el usuario
-            Container(
-                child: Text(
-              'puntos y ${_GameScreenState.nTablero} ${(_GameScreenState.nTablero == 1) ? 'tablero' : 'tableros'}',
-              style: Theme.of(context).textTheme.display1,
-            )),
-
-            /// Caja vacia con altura de 10 p
-            SizedBox(
-              height: 10,
-            ),
-
-            /// Container que imprime el numero de palabras faltantes a encontrar en el diccionario
-            Container(
-                child: Text(
-              '${_GameScreenState.nDiccionario} palabras faltantes de encontrar...',
-              style:
-                  Theme.of(context).textTheme.display1.copyWith(fontSize: 15),
-            )),
-
-            /// Caja vacia con altura de 40 p
-            SizedBox(
-              height: 40,
-            ),
-
-            /// Container del boton que nos envia al menu principal
-            Container(
-                child: RaisedButton.icon(
-              /// Nos dirige a la pantalla inicial del juego
-              onPressed: () {
-                Navigator.popUntil(context, ModalRoute.withName('/'));
-              },
-              elevation: 20,
-              label: Text('Regresar al Menu Principal',
+                  'Juego Finalizado!',
                   style: Theme.of(context)
                       .textTheme
-                      .button
-                      .copyWith(fontSize: 20)),
-              icon: Icon(Icons.arrow_back),
-              shape: StadiumBorder(),
-            )),
-          ],
-          mainAxisSize: MainAxisSize.min,
+                      .display1
+                      .copyWith(fontSize: 42),
+                ),
+              ),
+
+              /// Caja vacia con altura de 40 p
+              SizedBox(
+                height: 40,
+              ),
+
+              /// Container que muestra texto simple
+              Container(
+                child: Text('con', style: Theme.of(context).textTheme.display1),
+              ),
+
+              /// Container que imprime el puntaje en el centro de la pantalla con una fuente grande
+              Container(
+                  child: Text(
+                '${_GameScreenState.puntos}',
+                style: Theme.of(context)
+                    .textTheme
+                    .display4
+                    .copyWith(fontSize: 200),
+              )),
+
+              /// Container que imprime los tableros usados por el usuario
+              Container(
+                  child: Text(
+                'puntos y ${_GameScreenState.nTablero} ${(_GameScreenState.nTablero == 1) ? 'tablero' : 'tableros'}',
+                style: Theme.of(context).textTheme.display1,
+              )),
+
+              /// Caja vacia con altura de 10 p
+              SizedBox(
+                height: 10,
+              ),
+
+              /// Container que imprime el numero de palabras faltantes a encontrar en el diccionario
+              Container(
+                  child: Text(
+                '${_GameScreenState.nDiccionario} palabras faltantes de encontrar...',
+                style:
+                    Theme.of(context).textTheme.display1.copyWith(fontSize: 15),
+              )),
+
+              /// Caja vacia con altura de 40 p
+              SizedBox(
+                height: 40,
+              ),
+
+              /// Container del boton que nos envia al menu principal
+              Container(
+                  child: RaisedButton.icon(
+                /// Nos dirige a la pantalla inicial del juego
+                onPressed: () {
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                elevation: 20,
+                label: Text('Regresar al Menu Principal',
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        .copyWith(fontSize: 20)),
+                icon: Icon(Icons.arrow_back),
+                shape: StadiumBorder(),
+              )),
+            ],
+            mainAxisSize: MainAxisSize.min,
+          ),
         ),
-      ),
       ),
     );
   }
