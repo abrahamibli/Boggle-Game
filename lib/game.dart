@@ -74,7 +74,6 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: Row(
@@ -94,38 +93,82 @@ class _GameScreenState extends State<GameScreen> {
         ),
         elevation: 0,
       ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            /// Muestra Texto animado cuando el usuario escribe una palabra
-            AnimatedOpacity(
-              child: Container(
-                child: Text(
-                  '${puntosGanados > 0 ? 'Correcto, has ganado $puntosGanados puntos!' : 'Incorrecta o repetida, 0 puntos :C'}',
-                  style: Theme.of(context).textTheme.display1.copyWith(
-                        fontSize: 20,
+      body: SingleChildScrollView(
+              child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              /// Muestra Texto animado cuando el usuario escribe una palabra
+              AnimatedOpacity(
+                child: Container(
+                  child: Text(
+                    '${puntosGanados > 0 ? 'Correcto, has ganado $puntosGanados puntos!' : 'Incorrecta o repetida, 0 puntos :C'}',
+                    style: Theme.of(context).textTheme.display1.copyWith(
+                          fontSize: 20,
+                        ),
+                  ),
+                ),
+                opacity: visi == 1.0 ? 1.0 : 0.0,
+                duration: Duration(seconds: 1),
+              ),
+
+              /// Caja vacia con altura de 30 p
+              SizedBox(
+                height: 30,
+              ),
+
+              /// Container del boton 'refrescar'
+              Container(
+                width: 250,
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 20.0,
+                        spreadRadius: 5.0,
+                        offset: Offset(7.0, 7.0),
                       ),
+                    ],
+                  ),
+                  child: Center(
+                    child: IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.autorenew,
+                      ),
+                      iconSize: 20,
+                      tooltip: "refrescar tablero",
+                      onPressed: () {
+                        print("click it");
+
+                        /// incrementa variable [nTablero], y genera un tablero con
+                        /// caracteres aleatorios nuevos
+                        setState(() {
+                          nTablero++;
+                          encontradas.clear();
+                          tablero.crearTableroNuevo();
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
-              opacity: visi == 1.0 ? 1.0 : 0.0,
-              duration: Duration(seconds: 1),
-            ),
 
-            /// Caja vacia con altura de 30 p
-            SizedBox(
-              height: 30,
-            ),
-
-            /// Container del boton 'refrescar'
-            Container(
-              width: 250,
-              alignment: Alignment.bottomRight,
-              child: Container(
-                width: 35,
-                height: 35,
+              /// Container principal del tablero
+              Container(
+                width: 250,
+                height: 250,
+                child: Board(
+                  boardData: tablero.getTablero(),
+                ),
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black38,
@@ -134,92 +177,55 @@ class _GameScreenState extends State<GameScreen> {
                       offset: Offset(7.0, 7.0),
                     ),
                   ],
-                ),
-                child: Center(
-                  child: IconButton(
-                    color: Colors.white,
-                    icon: Icon(
-                      Icons.autorenew,
-                    ),
-                    iconSize: 20,
-                    tooltip: "refrescar tablero",
-                    onPressed: () {
-                      print("click it");
-
-                      /// incrementa variable [nTablero], y genera un tablero con
-                      /// caracteres aleatorios nuevos
-                      setState(() {
-                        nTablero++;
-                        encontradas.clear();
-                        tablero.crearTableroNuevo();
-                      });
-                    },
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    topLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15),
                   ),
                 ),
               ),
-            ),
 
-            /// Container principal del tablero
-            Container(
-              width: 250,
-              height: 250,
-              child: Board(
-                boardData: tablero.getTablero(),
-              ),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black38,
-                    blurRadius: 20.0,
-                    spreadRadius: 5.0,
-                    offset: Offset(7.0, 7.0),
+              /// Container del TextField
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                width: 250,
+                child: TextField(
+                  style: TextStyle(
+                    color: Theme.of(context).accentColor,
+                    fontSize: 20,
                   ),
-                ],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  topLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
+                  maxLength: 30,
+                  decoration: InputDecoration(
+                    hintText: "Escribe tu palabra aqui",
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  ),
+                  controller: text_field_clean,
+
+                  /// se encarga de desaparecer el texto de cuando
+                  /// el usuario inserta una palabra
+                  onTap: () {
+                    visi = 0.0;
+                  },
+                  onSubmitted: (String in_string) {
+                    /// Captura la cadena del usuario en la variable [user_string] y,
+                    /// limpia el TextField posteriormente
+                    setState(() {
+                      user_string = in_string;
+                      text_field_clean.text = "";
+                      print(in_string);
+                      verificarPalabra(in_string);
+                    });
+                  },
                 ),
               ),
-            ),
 
-            /// Container del TextField
-            Container(
-              margin: EdgeInsets.only(top: 50),
-              width: 250,
-              child: TextField(
-                maxLength: 30,
-                decoration: InputDecoration(
-                  hintText: "Escribe tu palabra aqui",
-                ),
-                controller: text_field_clean,
-
-                /// se encarga de desaparecer el texto de cuando
-                /// el usuario inserta una palabra
-                onTap: () {
-                  visi = 0.0;
-                },
-                onSubmitted: (String in_string) {
-                  /// Captura la cadena del usuario en la variable [user_string] y,
-                  /// limpia el TextField posteriormente
-                  setState(() {
-                    user_string = in_string;
-                    text_field_clean.text = "";
-                    print(in_string);
-                    verificarPalabra(in_string);
-                  });
-                },
+              /// Caja vacia con altura de 70 p
+              SizedBox(
+                height: 70,
               ),
-            ),
-
-            /// Caja vacia con altura de 70 p
-            SizedBox(
-              height: 70,
-            ),
-          ],
-          mainAxisSize: MainAxisSize.min,
+            ],
+            mainAxisSize: MainAxisSize.min,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -278,7 +284,11 @@ class Board extends StatelessWidget {
 class EndScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope( 
+      onWillPop: () async {
+        return Navigator.popAndPushNamed(context, '/');
+      },
+      child: Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Column(
@@ -355,6 +365,20 @@ class EndScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
         ),
       ),
+      ),
     );
   }
 }
+
+/*Future<bool> _willPopCallback() async {
+    return Navigator.canPop(context);
+}
+
+class _State extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+    );
+  }
+}*/
