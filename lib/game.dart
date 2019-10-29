@@ -79,6 +79,8 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        iconTheme: new IconThemeData(color: Theme.of(context).accentColor),
+        //leading: new Icon(Icons.menu, color: Colors.green,),
         title: Row(
           children: <Widget>[
             /// Coloca el numero de tableros actuales de la partida en la AppBar
