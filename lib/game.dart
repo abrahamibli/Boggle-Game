@@ -97,7 +97,8 @@ class _GameScreenState extends State<GameScreen> {
         elevation: 0,
       ),
       drawer: Theme(
-        data: Theme.of(context).copyWith(canvasColor: Theme.of(context).primaryColor),
+        data: Theme.of(context)
+            .copyWith(canvasColor: Theme.of(context).primaryColor),
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -107,7 +108,7 @@ class _GameScreenState extends State<GameScreen> {
                 child: DrawerHeader(
                   child: Text(
                     'Palabras Encontradas',
-                    style: Theme.of(context).textTheme.title.copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.title,
                   ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).accentColor,
@@ -119,11 +120,15 @@ class _GameScreenState extends State<GameScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                      encontradas.length,
-                      (index) => Text(
-                            '- ${encontradas[index][0].toUpperCase() + encontradas[index].substring(1)}',
-                            style: Theme.of(context).textTheme.body2.copyWith(fontSize: 20),
-                          )),
+                    encontradas.length,
+                    (index) => Text(
+                      '- ${encontradas[index][0].toUpperCase() + encontradas[index].substring(1)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .body2
+                          .copyWith(fontSize: 20),
+                    ),
+                  ),
                 ),
               ),
             ],
