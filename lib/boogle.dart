@@ -20,7 +20,7 @@ class Nodo {
 
   /// Lee el archivo 'diccionario.txt' dentro de /assets e
   /// e inicializa el trie con todas las palabras
-  void inicializar() async {
+  inicializar() async {
     String file = await rootBundle.loadString('assets/dic/diccionario.txt');
     LineSplitter ls = LineSplitter();
     List<String> lines = ls.convert(file);

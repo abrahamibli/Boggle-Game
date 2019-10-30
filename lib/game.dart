@@ -19,25 +19,36 @@ class _GameScreenState extends State<GameScreen> {
   Nodo trie; // Nueva estructura trie
   Tablero tablero; // Nuevo Tablero
   String user_string; // Captura cadena escrita por el usuario en el TextField
-  List<String> encontradas; // Lista palabras encontradas por el usuario
+  List<String> encontradas,
+      encontradasTotales; // Lista palabras encontradas por el usuario
   double visi; // Controla animacion de texto cuando usuario encuentra palabra
   final TextEditingController text_field_clean =
       TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
+  static bool cargando;
 
   @override
   void initState() {
     super.initState();
+    cargando = true;
     visi = 0.0;
     puntos = 0;
     puntosGanados = 0;
     nTablero = 1;
     nDiccionario = 80257;
     encontradas = List<String>();
+    encontradasTotales = List<String>();
     tablero = Tablero();
     trie = Nodo();
     tablero.crearTableroNuevo();
     user_string = "";
-    trie.inicializar();
+    initTrie();
+  }
+
+  void initTrie() async {
+    await trie.inicializar();
+    setState(() {
+      cargando = false;
+    });
   }
 
   /// Suma puntos a [puntos] si la palabra fue correcta.
@@ -59,6 +70,7 @@ class _GameScreenState extends State<GameScreen> {
               puntos += puntosGanados;
               nDiccionario--;
               encontradas.add(palabra);
+              encontradasTotales.add(palabra);
               encontrado = true;
             }
             visi = 1.0;
@@ -84,7 +96,10 @@ class _GameScreenState extends State<GameScreen> {
         title: Row(
           children: <Widget>[
             /// Coloca el numero de tableros actuales de la partida en la AppBar
-            Text('Tablero: $nTablero'),
+            Text(
+              'Tablero: $nTablero',
+              style: TextStyle(color: Theme.of(context).accentColor),
+            ),
 
             /// Caja vacia con ancho de 45 p
             SizedBox(
@@ -92,7 +107,10 @@ class _GameScreenState extends State<GameScreen> {
             ),
 
             /// Coloca el puntaje actual del usuario en la AppBar
-            Text('Puntos: $puntos'),
+            Text(
+              'Puntos: $puntos',
+              style: TextStyle(color: Theme.of(context).accentColor),
+            ),
           ],
           mainAxisSize: MainAxisSize.max,
         ),
@@ -122,9 +140,9 @@ class _GameScreenState extends State<GameScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                    encontradas.length,
+                    encontradasTotales.length,
                     (index) => Text(
-                      '- ${encontradas[index][0].toUpperCase() + encontradas[index].substring(1)}',
+                      '- ${encontradasTotales[index][0].toUpperCase() + encontradasTotales[index].substring(1)}',
                       style: Theme.of(context)
                           .textTheme
                           .body2
@@ -188,15 +206,19 @@ class _GameScreenState extends State<GameScreen> {
                       iconSize: 20,
                       tooltip: "refrescar tablero",
                       onPressed: () {
-                        print("click it");
+                        if (nTablero < 5) {
+                          print("click it");
 
-                        /// incrementa variable [nTablero], y genera un tablero con
-                        /// caracteres aleatorios nuevos
-                        setState(() {
-                          nTablero++;
-                          encontradas.clear();
-                          tablero.crearTableroNuevo();
-                        });
+                          /// incrementa variable [nTablero], y genera un tablero con
+                          /// caracteres aleatorios nuevos
+                          setState(() {
+                            nTablero++;
+                            encontradas.clear();
+                            tablero.crearTableroNuevo();
+                          });
+                        } else {
+                          null;
+                        }
                       },
                     ),
                   ),
@@ -207,9 +229,11 @@ class _GameScreenState extends State<GameScreen> {
               Container(
                 width: 250,
                 height: 250,
-                child: Board(
-                  boardData: tablero.getTablero(),
-                ),
+                child: cargando
+                    ? Center(child: CircularProgressIndicator())
+                    : Board(
+                        boardData: tablero.getTablero(),
+                      ),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,

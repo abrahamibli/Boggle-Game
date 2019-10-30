@@ -7,6 +7,7 @@
 
 import 'package:boggle_game/game.dart';
 import 'package:boggle_game/menu.dart';
+import 'package:boggle_game/help.dart';
 import 'package:flutter/material.dart';
 
 /// Ejecuta la Boggle App
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => MenuScreen(), // Pantalla Inicial del juego
-        '/game': (context) => GameScreen(), // Pantalla que muestra el tablero y la interaccion don el usuario
+        '/game' : (context) => GameScreen(), // Pantalla que muestra el tablero y la interaccion don el usuario
+        '/help' : (context) => HelpScreen(), // Pantalla que muestra las reglas del juego
         '/end' : (context) => EndScreen() // Pantalla que muestra los resultados
       },
       initialRoute: '/', // Define el Menu como la pantalla principal

@@ -41,6 +41,24 @@ class _MenuScreenState extends State<MenuScreen> {
               elevation: 20,
               color: Theme.of(context).accentColor,
             ),
+             SizedBox(
+              height: 10,
+            ),
+            /// Inserta boton responsable de entrar a pantalla ayuda
+            RaisedButton(
+              child: Text(
+                '       Ayuda       ',
+                style:
+                    Theme.of(context).textTheme.button.copyWith(fontSize: 20),
+              ),
+              onPressed: () {
+                print('ayuda');
+                Navigator.of(context).pushNamed('/help'); 
+              },
+              shape: StadiumBorder(),
+              elevation: 20,
+              color: Theme.of(context).accentColor,
+            ),
             /// Coloca una caja vacia con altura 10 p
             SizedBox(
               height: 10,
@@ -48,7 +66,7 @@ class _MenuScreenState extends State<MenuScreen> {
              /// Inserta boton para salir de la App
             RaisedButton(
               child: Text(
-                '        Salir         ',
+                '         Salir        ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
@@ -62,7 +80,7 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             /// Coloca una caja vacia con altura 75 p
             SizedBox(
-              height: 75,
+              height: 50,
             ),
           ],
           mainAxisSize: MainAxisSize.min,
