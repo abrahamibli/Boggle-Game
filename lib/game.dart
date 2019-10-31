@@ -25,11 +25,15 @@ class _GameScreenState extends State<GameScreen> {
   final TextEditingController text_field_clean =
       TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
   static bool cargando;
+  static String palUsuario = '';
+  Color colorBorde;
+
 
   @override
   void initState() {
     super.initState();
     cargando = true;
+    colorBorde = Colors.transparent;
     visi = 0.0;
     puntos = 0;
     puntosGanados = 0;
@@ -59,29 +63,31 @@ class _GameScreenState extends State<GameScreen> {
     Nodo donde;
     bool encontrado = false;
 
-    for (int i = 0; i < Tablero.tamx; i++) {
-      for (int j = 0; j < Tablero.tamy; j++) {
-        if (tablero.palabraExiste(palabra, 0, i, j)) {
-          donde = trie.buscar(palabra);
-          if ((palabra.length == Nodo.tam) && donde.fin) {
-            print("Palabra correcta!...");
-            if (!encontradas.contains(palabra)) {
-              puntosGanados = 5 * palabra.length;
-              puntos += puntosGanados;
-              nDiccionario--;
-              encontradas.add(palabra);
-              encontradasTotales.add(palabra);
-              encontrado = true;
-            }
-            visi = 1.0;
-          }
-          Nodo.tam = 0;
-        }
+    //for (int i = 0; i < Tablero.tamx; i++) {
+    //for (int j = 0; j < Tablero.tamy; j++) {
+    // if (tablero.palabraExiste(palabra, 0, i, j)) {
+    donde = trie.buscar(palabra);
+    if ((palabra.length == Nodo.tam) && donde.fin) {
+      print("Palabra correcta!...");
+      if (!encontradas.contains(palabra)) {
+        puntosGanados = 5 * palabra.length;
+        puntos += puntosGanados;
+        nDiccionario--;
+        encontradas.add(palabra);
+        encontradasTotales.add(palabra);
+        encontrado = true;
       }
+      colorBorde = Colors.green;
+      visi = 1.0;
     }
+    Nodo.tam = 0;
+    // }
+    //  }
+    //  }
     if (!encontrado) {
       puntosGanados = 0;
       visi = 1.0;
+      colorBorde = Colors.red;
       print("Palabra no existe!...");
     }
   }
@@ -188,21 +194,22 @@ class _GameScreenState extends State<GameScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      "${5-nTablero}",
+                      "${5 - nTablero}",
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-
                     SizedBox(
                       width: 5,
                     ),
-
                     Container(
                       width: 35,
                       height: 35,
                       decoration: BoxDecoration(
                         color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black38,
@@ -229,6 +236,7 @@ class _GameScreenState extends State<GameScreen> {
                               setState(() {
                                 nTablero++;
                                 encontradas.clear();
+                                colorBorde = Colors.transparent;
                                 tablero.crearTableroNuevo();
                               });
                             } else {
@@ -271,7 +279,7 @@ class _GameScreenState extends State<GameScreen> {
               ),
 
               /// Container del TextField
-              Container(
+              /*Container(
                 margin: EdgeInsets.only(top: 50),
                 width: 250,
                 child: TextField(
@@ -303,13 +311,84 @@ class _GameScreenState extends State<GameScreen> {
                     });
                   },
                 ),
+              ),*/
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 40),
+                    width: 207.5,
+                    height: 50,
+                    child: Text(
+                      palUsuario,
+                      style: Theme.of(context)
+                          .textTheme
+                          .body2
+                          .copyWith(color: Colors.black, fontSize: 24),
+                    ),
+                    padding: EdgeInsets.only(top: 10, bottom: 10, left: 30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 20.0,
+                          spreadRadius: 5.0,
+                          offset: Offset(7.0, 7.0),
+                        ),
+                      ],
+                      border: Border.all(color: colorBorde),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 42.5,
+                    height: 50,
+                    margin: EdgeInsets.only(top: 40),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 20.0,
+                          spreadRadius: 5.0,
+                          offset: Offset(7.0, 7.0),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
+                    child: IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.check,
+                      ),
+                      iconSize: 20,
+                      tooltip: "verificar palabra",
+                      onPressed: () {
+                        setState(() {
+                          if (palUsuario != '') {
+                            _BoardState.checado = true;
+                            verificarPalabra(palUsuario);
+                            palUsuario = '';
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
 
               /// Caja vacia con altura de 70 p
               SizedBox(
-                height: 24,
+                height: 60,
               ),
-
               RaisedButton.icon(
                 color: Theme.of(context).accentColor,
                 label: Text('Finalizar Partida',
@@ -322,9 +401,8 @@ class _GameScreenState extends State<GameScreen> {
                   Navigator.of(context).pushNamed('/end');
                 },
                 shape: StadiumBorder(),
-                elevation: 12,    
+                elevation: 12,
               ),
-
               SizedBox(
                 height: 15,
               ),
@@ -338,7 +416,7 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 /// Inserta la lista de caracteres del tablero a Containers individuales
-class Board extends StatelessWidget {
+class Board extends StatefulWidget {
   final String boardData;
 
   const Board({
@@ -347,27 +425,83 @@ class Board extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _BoardState createState() => _BoardState();
+}
+
+class _BoardState extends State<Board> {
+  List<double> borde;
+  List<FontWeight> letras;
+  static bool checado;
+  int idxAnt;
+
+  _BoardState() {
+    borde = [for (int i = 0; i < 25; i++) 1.0];
+    letras = [for (int i = 0; i < 25; i++) FontWeight.normal];
+    checado = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (checado) {
+      borde = [for (int i = 0; i < 25; i++) 1.0];
+      letras = [for (int i = 0; i < 25; i++) FontWeight.normal];
+      idxAnt = null;
+    }
     return GridView.count(
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 5,
       children: List.generate(25, (index) {
         return Center(
-          child: Container(
-            width: 37,
-            height: 37,
-            alignment: Alignment.center,
-            child: Text(
-              '${boardData[index]}',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline
-                  .copyWith(color: Colors.black, fontSize: 20),
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
+          child: GestureDetector(
+            onTap: () {
+              bool vecino = false;
+              if ((idxAnt == index - 1 ||
+                      idxAnt == index + 1 ||
+                      idxAnt == index - 5 ||
+                      idxAnt == index + 5 ||
+                      idxAnt == index - 4 ||
+                      idxAnt == index - 6 ||
+                      idxAnt == index + 4 ||
+                      idxAnt == index + 6 ||
+                      idxAnt == null) &&
+                  idxAnt != index) vecino = true;
+              setState(() {
+                checado = false;
+                if (borde[index] == 1.0 && vecino) {
+                  borde[index] = 2.5;
+                  letras[index] = FontWeight.w700;
+                  idxAnt = index;
+                  _GameScreenState.palUsuario += widget.boardData[index];
+                  print(_GameScreenState.palUsuario);
+                } else if (borde[index] == 2.5 && vecino) {
+                  borde[index] = 4.0;
+                  letras[index] = FontWeight.bold;
+                  idxAnt = index;
+                  _GameScreenState.palUsuario += widget.boardData[index];
+                  print(_GameScreenState.palUsuario);
+                } else if (vecino) {
+                  idxAnt = index;
+                  _GameScreenState.palUsuario += widget.boardData[index];
+                  print(_GameScreenState.palUsuario);
+                }
+              });
+            },
+            child: Container(
+              width: 37,
+              height: 37,
+              alignment: Alignment.center,
+              child: Text(
+                '${widget.boardData[index]}',
+                style: Theme.of(context).textTheme.headline.copyWith(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: letras[index]),
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(width: borde[index]),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
               ),
             ),
           ),
@@ -416,13 +550,10 @@ class EndScreen extends StatelessWidget {
               Container(
                   child: Text(
                 '${_GameScreenState.puntos}',
-                style: Theme.of(context)
-                    .textTheme
-                    .display4
-                    .copyWith(
+                style: Theme.of(context).textTheme.display4.copyWith(
                       fontSize: 200,
                       color: Theme.of(context).accentColor,
-                      fontWeight: FontWeight.w300, 
+                      fontWeight: FontWeight.w300,
                       letterSpacing: -20,
                     ),
               )),
