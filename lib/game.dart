@@ -156,6 +156,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,45 +184,61 @@ class _GameScreenState extends State<GameScreen> {
               Container(
                 width: 250,
                 alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 20.0,
-                        spreadRadius: 5.0,
-                        offset: Offset(7.0, 7.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      "${5-nTablero}",
+                      style: TextStyle(
+                        fontSize: 20,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: Icon(
-                        Icons.autorenew,
-                      ),
-                      iconSize: 20,
-                      tooltip: "refrescar tablero",
-                      onPressed: () {
-                        if (nTablero < 5) {
-                          print("click it");
-
-                          /// incrementa variable [nTablero], y genera un tablero con
-                          /// caracteres aleatorios nuevos
-                          setState(() {
-                            nTablero++;
-                            encontradas.clear();
-                            tablero.crearTableroNuevo();
-                          });
-                        } else {
-                          null;
-                        }
-                      },
                     ),
-                  ),
+
+                    SizedBox(
+                      width: 5,
+                    ),
+
+                    Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).accentColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 20.0,
+                            spreadRadius: 5.0,
+                            offset: Offset(7.0, 7.0),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: IconButton(
+                          color: Colors.white,
+                          icon: Icon(
+                            Icons.autorenew,
+                          ),
+                          iconSize: 20,
+                          tooltip: "refrescar tablero",
+                          onPressed: () {
+                            if (nTablero < 5) {
+                              print("click it");
+
+                              /// incrementa variable [nTablero], y genera un tablero con
+                              /// caracteres aleatorios nuevos
+                              setState(() {
+                                nTablero++;
+                                encontradas.clear();
+                                tablero.crearTableroNuevo();
+                              });
+                            } else {
+                              null;
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -290,20 +307,31 @@ class _GameScreenState extends State<GameScreen> {
 
               /// Caja vacia con altura de 70 p
               SizedBox(
-                height: 70,
+                height: 24,
+              ),
+
+              RaisedButton.icon(
+                color: Theme.of(context).accentColor,
+                label: Text('Finalizar Partida',
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        .copyWith(fontSize: 20)),
+                icon: Icon(Icons.check),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/end');
+                },
+                shape: StadiumBorder(),
+                elevation: 12,    
+              ),
+
+              SizedBox(
+                height: 15,
               ),
             ],
             mainAxisSize: MainAxisSize.min,
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        /// Boton 'Terminar' que nos dirije a la pantalla final de resultados
-        onPressed: () {
-          Navigator.of(context).pushNamed('/end');
-        },
-        label: Text('Terminar'),
-        icon: Icon(Icons.check),
       ),
     );
   }
@@ -391,7 +419,12 @@ class EndScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .display4
-                    .copyWith(fontSize: 200),
+                    .copyWith(
+                      fontSize: 200,
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.w300, 
+                      letterSpacing: -20,
+                    ),
               )),
 
               /// Container que imprime los tableros usados por el usuario
@@ -426,6 +459,7 @@ class EndScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
+                color: Theme.of(context).accentColor,
                 elevation: 20,
                 label: Text('Regresar al Menu Principal',
                     style: Theme.of(context)

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Controla la Pantalla incial del juego 
+/// Controla la Pantalla incial del juego
 class MenuScreen extends StatefulWidget {
   MenuScreen({Key key}) : super(key: key);
   @override
@@ -16,71 +16,88 @@ class _MenuScreenState extends State<MenuScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Column(
-          children: <Widget>[ // Inicia lista de Widgets que aparecen en pantalla de Menu
+          children: <Widget>[
+            // Inicia lista de Widgets que aparecen en pantalla de Menu
             /// Coloca la imagen 'png' presente en /assets
             Container(
               width: 250,
               child: Image.asset('assets/BoggleBoard.png'),
             ),
+            Text(
+              'Boggle!',
+              style: Theme.of(context).textTheme.title.copyWith(
+                    color: Colors.black,
+                    //fontFamily: 'Schyler',
+                    fontSize: 60,
+                  ),
+            ),
+
             /// Coloca una caja vacia con altura 75 p
             SizedBox(
-              height: 75,
+              height: 50,
             ),
+
             /// Inserta boton responsable de iniciar partida
-            RaisedButton(
-              child: Text(
-                'Nueva Partida',
+            RaisedButton.icon(
+              icon: Icon(Icons.play_arrow),
+              label: Text(
+                '   Jugar      ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
               onPressed: () {
                 print('nueva partida');
-                Navigator.of(context).pushNamed('/game'); 
+                Navigator.of(context).pushNamed('/game');
               },
               shape: StadiumBorder(),
               elevation: 20,
               color: Theme.of(context).accentColor,
             ),
-             SizedBox(
+            SizedBox(
               height: 10,
             ),
+
             /// Inserta boton responsable de entrar a pantalla ayuda
-            RaisedButton(
-              child: Text(
-                '       Ayuda       ',
+            RaisedButton.icon(
+              icon: Icon(Icons.help_outline),
+              label: Text(
+                '  Ayuda      ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
               onPressed: () {
                 print('ayuda');
-                Navigator.of(context).pushNamed('/help'); 
+                Navigator.of(context).pushNamed('/help');
               },
               shape: StadiumBorder(),
               elevation: 20,
               color: Theme.of(context).accentColor,
             ),
+
             /// Coloca una caja vacia con altura 10 p
             SizedBox(
               height: 10,
             ),
-             /// Inserta boton para salir de la App
-            RaisedButton(
-              child: Text(
-                '         Salir        ',
+
+            /// Inserta boton para salir de la App
+            RaisedButton.icon(
+              icon: Icon(Icons.info_outline),
+              label: Text(
+                'Acerca de ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
               onPressed: () {
-                print('salir');
-                SystemNavigator.pop();
+                Navigator.of(context).pushNamed('/about');
               },
               shape: StadiumBorder(),
               elevation: 20,
               color: Theme.of(context).accentColor,
             ),
+
             /// Coloca una caja vacia con altura 75 p
             SizedBox(
-              height: 50,
+              height: 25,
             ),
           ],
           mainAxisSize: MainAxisSize.min,

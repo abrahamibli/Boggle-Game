@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HelpScreen extends StatelessWidget {
+class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +10,7 @@ class HelpScreen extends StatelessWidget {
           color: Theme.of(context).accentColor,
         ),
         title: Text(
-          '¿Como Jugar?',
+          'Acerca de',
           style: TextStyle(color: Theme.of(context).accentColor),
         ),
         elevation: 0,
