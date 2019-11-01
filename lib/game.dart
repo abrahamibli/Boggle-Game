@@ -28,7 +28,6 @@ class _GameScreenState extends State<GameScreen> {
   static String palUsuario = '';
   Color colorBorde;
 
-
   @override
   void initState() {
     super.initState();
@@ -63,9 +62,6 @@ class _GameScreenState extends State<GameScreen> {
     Nodo donde;
     bool encontrado = false;
 
-    //for (int i = 0; i < Tablero.tamx; i++) {
-    //for (int j = 0; j < Tablero.tamy; j++) {
-    // if (tablero.palabraExiste(palabra, 0, i, j)) {
     donde = trie.buscar(palabra);
     if ((palabra.length == Nodo.tam) && donde.fin) {
       print("Palabra correcta!...");
@@ -81,9 +77,7 @@ class _GameScreenState extends State<GameScreen> {
       visi = 1.0;
     }
     Nodo.tam = 0;
-    // }
-    //  }
-    //  }
+
     if (!encontrado) {
       puntosGanados = 0;
       visi = 1.0;
@@ -278,47 +272,47 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
 
-              /// Container del TextField
-              /*Container(
-                margin: EdgeInsets.only(top: 50),
-                width: 250,
-                child: TextField(
-                  style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                    fontSize: 20,
-                  ),
-                  maxLength: 30,
-                  decoration: InputDecoration(
-                    hintText: "Escribe tu palabra aqui",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                  controller: text_field_clean,
-
-                  /// se encarga de desaparecer el texto de cuando
-                  /// el usuario inserta una palabra
-                  onTap: () {
-                    visi = 0.0;
-                  },
-                  onSubmitted: (String in_string) {
-                    /// Captura la cadena del usuario en la variable [user_string] y,
-                    /// limpia el TextField posteriormente
-                    setState(() {
-                      user_string = in_string;
-                      text_field_clean.text = "";
-                      print(in_string);
-                      verificarPalabra(in_string);
-                    });
-                  },
-                ),
-              ),*/
               Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
+                    width: 42.5,
+                    height: 50,
                     margin: EdgeInsets.only(top: 40),
-                    width: 207.5,
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 20.0,
+                          spreadRadius: 5.0,
+                          offset: Offset(7.0, 7.0),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                      ),
+                    ),
+                    child: IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        Icons.clear,
+                      ),
+                      iconSize: 20,
+                      tooltip: "borrar palabra",
+                      onPressed: () {
+                        setState(() {
+                          palUsuario = '';
+                          _BoardState.checado = true;
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 40),
+                    width: 165,
                     height: 50,
                     child: Text(
                       palUsuario,
@@ -326,8 +320,9 @@ class _GameScreenState extends State<GameScreen> {
                           .textTheme
                           .body2
                           .copyWith(color: Colors.black, fontSize: 24),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    padding: EdgeInsets.only(top: 10, bottom: 10, left: 30),
+                    padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -339,10 +334,6 @@ class _GameScreenState extends State<GameScreen> {
                         ),
                       ],
                       border: Border.all(color: colorBorde),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        topLeft: Radius.circular(15),
-                      ),
                     ),
                   ),
                   Container(
