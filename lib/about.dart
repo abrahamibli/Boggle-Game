@@ -18,17 +18,33 @@ class AboutScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(20),
         child: ListView(
-          children: [
+          children: <Widget>[
             Text(
-              """El Boggle es un juego de mesa cuyo objetivo es encontrar el mayor numero de palabras en el tablero dado.
-            \nCada tablero cuenta con 25 letras (5x5) aleatorias y en el se pueden buscar las palabras de manera vertical, horizontal o en diagonales, esto en cualquier direccion.
-            \nPor cada palabra encontrada se daran puntos, el numero de puntos esta determinado por la longitud de la palabra encontrada (5 puntos por letra).
-            \nFinalmente, se puede refrescar el tablero hasta un maximo de 5 veces
-            \n\n\nUriel Omar Gonzalez\nAbraham Ibarra Linares""",
+              """App creada por:\n\nAbraham Ibarra Linares\nUriel Omar González Jimenez
+              \nEstudiantes de...""",
               style: Theme.of(context).textTheme.body2.copyWith(fontSize: 18),
-              textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
+            ),
+
+            SizedBox(
+              height: 30,
+            ),
+
+            Container(
+              height: 170,
+              child: Image.asset("assets/logoUach.png"),
+            ),
+
+            SizedBox(
+              height: 30,
+            ),
+
+            Container(
+              height: 155,
+              child: Image.asset("assets/logoIngenieria.png"),
             ),
           ],
+
           physics: BouncingScrollPhysics(),
         ),
       ),

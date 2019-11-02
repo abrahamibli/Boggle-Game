@@ -24,7 +24,7 @@ class HelpScreen extends StatelessWidget {
             \nCada tablero cuenta con 25 letras (5x5) aleatorias y en el se pueden buscar las palabras de manera vertical, horizontal o en diagonales, esto en cualquier direccion.
             \nPor cada palabra encontrada se daran puntos, el numero de puntos esta determinado por la longitud de la palabra encontrada (5 puntos por letra).
             \nFinalmente, se puede refrescar el tablero hasta un maximo de 5 veces
-            \n\n\nUriel Omar Gonzalez\nAbraham Ibarra Linares""",
+            \n\n""",
               style: Theme.of(context).textTheme.body2.copyWith(fontSize: 18),
               textAlign: TextAlign.justify,
             ),

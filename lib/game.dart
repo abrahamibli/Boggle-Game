@@ -21,7 +21,7 @@ class _GameScreenState extends State<GameScreen> {
   String user_string; // Captura cadena escrita por el usuario en el TextField
   List<String> encontradas,
       encontradasTotales; // Lista palabras encontradas por el usuario
-  double visi; // Controla animacion de texto cuando usuario encuentra palabra
+  static double visi; // Controla animacion de texto cuando usuario encuentra palabra
   final TextEditingController text_field_clean =
       TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
   static bool cargando;
@@ -252,6 +252,11 @@ class _GameScreenState extends State<GameScreen> {
                     ? Center(child: CircularProgressIndicator())
                     : Board(
                         boardData: tablero.getTablero(),
+                        onClick: (letra) {
+                          setState(() {
+                            palUsuario += letra;
+                          });
+                        } 
                       ),
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -389,6 +394,7 @@ class _GameScreenState extends State<GameScreen> {
                         .copyWith(fontSize: 20)),
                 icon: Icon(Icons.check),
                 onPressed: () {
+                  palUsuario = '';
                   Navigator.of(context).pushNamed('/end');
                 },
                 shape: StadiumBorder(),
@@ -409,10 +415,12 @@ class _GameScreenState extends State<GameScreen> {
 /// Inserta la lista de caracteres del tablero a Containers individuales
 class Board extends StatefulWidget {
   final String boardData;
+  final Function(String letra) onClick;
 
   const Board({
     Key key,
     this.boardData,
+    this.onClick,
   }) : super(key: key);
 
   @override
@@ -424,6 +432,7 @@ class _BoardState extends State<Board> {
   List<FontWeight> letras;
   static bool checado;
   int idxAnt;
+  bool vecino;
 
   _BoardState() {
     borde = [for (int i = 0; i < 25; i++) 1.0];
@@ -445,7 +454,8 @@ class _BoardState extends State<Board> {
         return Center(
           child: GestureDetector(
             onTap: () {
-              bool vecino = false;
+              _GameScreenState.visi = 0.0;
+              vecino = false;
               if ((idxAnt == index - 1 ||
                       idxAnt == index + 1 ||
                       idxAnt == index - 5 ||
@@ -456,26 +466,24 @@ class _BoardState extends State<Board> {
                       idxAnt == index + 6 ||
                       idxAnt == null) &&
                   idxAnt != index) vecino = true;
-              setState(() {
-                checado = false;
-                if (borde[index] == 1.0 && vecino) {
-                  borde[index] = 2.5;
-                  letras[index] = FontWeight.w700;
-                  idxAnt = index;
-                  _GameScreenState.palUsuario += widget.boardData[index];
-                  print(_GameScreenState.palUsuario);
-                } else if (borde[index] == 2.5 && vecino) {
-                  borde[index] = 4.0;
-                  letras[index] = FontWeight.bold;
-                  idxAnt = index;
-                  _GameScreenState.palUsuario += widget.boardData[index];
-                  print(_GameScreenState.palUsuario);
-                } else if (vecino) {
-                  idxAnt = index;
-                  _GameScreenState.palUsuario += widget.boardData[index];
-                  print(_GameScreenState.palUsuario);
-                }
-              });
+                  setState(() {
+                    checado = false;
+                    if (borde[index] == 1.0 && vecino) {
+                      borde[index] = 2.5;
+                      letras[index] = FontWeight.w700;
+                      idxAnt = index;
+                      widget.onClick(widget.boardData[index]);
+                    } else if (borde[index] == 2.5 && vecino) {
+                      borde[index] = 4.0;
+                      letras[index] = FontWeight.bold;
+                      idxAnt = index;
+                      widget.onClick(widget.boardData[index]);
+                    } else if (vecino) {
+                      idxAnt = index;
+                      widget.onClick(widget.boardData[index]);
+                    }
+                  });
+                
             },
             child: Container(
               width: 37,
