@@ -18,16 +18,16 @@ class _GameScreenState extends State<GameScreen> {
   int puntosGanados; // Puntos parciales, multiplicador x5 cuando encuentra una palabra
   Nodo trie; // Nueva estructura trie
   Tablero tablero; // Nuevo Tablero
-  String user_string; // Captura cadena escrita por el usuario en el TextField
   List<String> encontradas,
       encontradasTotales; // Lista palabras encontradas por el usuario
   static double visi; // Controla animacion de texto cuando usuario encuentra palabra
   final TextEditingController text_field_clean =
       TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
-  static bool cargando;
-  static String palUsuario = '';
-  Color colorBorde;
+  static bool cargando; // Controla tiempo de carga del tablero cuando se inicia partida
+  static String palUsuario = ''; // Formada cuando se hace Tap en el tablero
+  Color colorBorde; // Verde si la palabra es correcta, Rojo en caso contrario 
 
+  /// Metodo que inicializa las variables utilizadas en esta clase [_GameScreenState]
   @override
   void initState() {
     super.initState();
@@ -43,12 +43,13 @@ class _GameScreenState extends State<GameScreen> {
     tablero = Tablero();
     trie = Nodo();
     tablero.crearTableroNuevo();
-    user_string = "";
     initTrie();
   }
 
+  /// Invoca el metodo que inicializa el [trie] con las palabras del diccionario
   void initTrie() async {
     await trie.inicializar();
+    /// Muestra una pantalla de carga cuando el trie esta llenando
     setState(() {
       cargando = false;
     });
@@ -92,7 +93,6 @@ class _GameScreenState extends State<GameScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         iconTheme: new IconThemeData(color: Theme.of(context).accentColor),
-        //leading: new Icon(Icons.menu, color: Colors.green,),
         title: Row(
           children: <Widget>[
             /// Coloca el numero de tableros actuales de la partida en la AppBar
@@ -116,6 +116,7 @@ class _GameScreenState extends State<GameScreen> {
         ),
         elevation: 0,
       ),
+      /// Agrega pantalla deslizante que muestra la lista con las palabras encontradas del tablero
       drawer: Theme(
         data: Theme.of(context)
             .copyWith(canvasColor: Theme.of(context).primaryColor),
@@ -123,6 +124,7 @@ class _GameScreenState extends State<GameScreen> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
+              /// Muestra el titulo de la pantalla deslizante
               Container(
                 height: 90,
                 child: DrawerHeader(
@@ -135,6 +137,9 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                 ),
               ),
+
+              /// Muestra cada palabra de la lista [encontradasTotales] en el cuerpo
+              /// de la pantalla deslizante
               Padding(
                 padding: const EdgeInsets.only(left: 15.0, top: 8.0),
                 child: Column(
@@ -224,8 +229,7 @@ class _GameScreenState extends State<GameScreen> {
                           onPressed: () {
                             if (nTablero < 5) {
                               print("click it");
-
-                              /// incrementa variable [nTablero], y genera un tablero con
+                              /// Incrementa variable [nTablero], y genera un tablero con
                               /// caracteres aleatorios nuevos
                               setState(() {
                                 nTablero++;
@@ -252,6 +256,8 @@ class _GameScreenState extends State<GameScreen> {
                     ? Center(child: CircularProgressIndicator())
                     : Board(
                         boardData: tablero.getTablero(),
+                        /// Funcion personalizada para que el TextField se actualice
+                        /// cada vez que se hace Tap en el tablero
                         onClick: (letra) {
                           setState(() {
                             palUsuario += letra;
@@ -277,10 +283,12 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
 
+              /// Ordena tres elementos; Boton Rojo, TextField, Boton Verde
               Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  /// Muestra el boton izquierdo al TextField
                   Container(
                     width: 42.5,
                     height: 50,
@@ -300,6 +308,7 @@ class _GameScreenState extends State<GameScreen> {
                         topLeft: Radius.circular(15),
                       ),
                     ),
+                    /// Boton Rojo X
                     child: IconButton(
                       color: Colors.white,
                       icon: Icon(
@@ -307,6 +316,7 @@ class _GameScreenState extends State<GameScreen> {
                       ),
                       iconSize: 20,
                       tooltip: "borrar palabra",
+                      /// Borra el contenido del Textfield cuando se presiona
                       onPressed: () {
                         setState(() {
                           palUsuario = '';
@@ -315,6 +325,9 @@ class _GameScreenState extends State<GameScreen> {
                       },
                     ),
                   ),
+
+                  /// Textfield que se actualiza conforme se hace Tap en el tablero mostrando
+                  /// las cadenas que el usuario forma
                   Container(
                     margin: EdgeInsets.only(top: 40),
                     width: 165,
@@ -341,6 +354,8 @@ class _GameScreenState extends State<GameScreen> {
                       border: Border.all(color: colorBorde),
                     ),
                   ),
+
+                  /// Muestra el boton derecho al TextField
                   Container(
                     width: 42.5,
                     height: 50,
@@ -360,6 +375,7 @@ class _GameScreenState extends State<GameScreen> {
                         topRight: Radius.circular(15),
                       ),
                     ),
+                    /// Boton Verde ./
                     child: IconButton(
                       color: Colors.white,
                       icon: Icon(
@@ -367,6 +383,8 @@ class _GameScreenState extends State<GameScreen> {
                       ),
                       iconSize: 20,
                       tooltip: "verificar palabra",
+                      /// Verifica el contenido del Textfield cuando se presiona y limpia la palabra
+                      /// concatenada
                       onPressed: () {
                         setState(() {
                           if (palUsuario != '') {
@@ -385,6 +403,8 @@ class _GameScreenState extends State<GameScreen> {
               SizedBox(
                 height: 60,
               ),
+
+              /// Boton que nos envia a la pantalla final de puntuacion
               RaisedButton.icon(
                 color: Theme.of(context).accentColor,
                 label: Text('Finalizar Partida',
@@ -400,6 +420,8 @@ class _GameScreenState extends State<GameScreen> {
                 shape: StadiumBorder(),
                 elevation: 12,
               ),
+
+              /// Caja vacia con altura de 15 p
               SizedBox(
                 height: 15,
               ),
@@ -427,6 +449,7 @@ class Board extends StatefulWidget {
   _BoardState createState() => _BoardState();
 }
 
+/// Controla el Touch que se genera dentro del Grid del tablero
 class _BoardState extends State<Board> {
   List<double> borde;
   List<FontWeight> letras;
@@ -584,7 +607,7 @@ class EndScreen extends StatelessWidget {
 
               /// Container del boton que nos envia al menu principal
               Container(
-                  child: RaisedButton.icon(
+                child: RaisedButton.icon(
                 /// Nos dirige a la pantalla inicial del juego
                 onPressed: () {
                   Navigator.popUntil(context, ModalRoute.withName('/'));

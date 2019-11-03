@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Muestra informacion de personal
 class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class AboutScreen extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: ListView(
           children: <Widget>[
+            /// Muestra los creditos
             Text(
               """App creada por:\n\nAbraham Ibarra Linares\nUriel Omar González Jimenez
               \nEstudiantes de...""",
@@ -26,19 +28,23 @@ class AboutScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
 
+            /// Caja vacia con altura de 30 p
             SizedBox(
               height: 30,
             ),
 
+            /// Muestra imagen con logo de la Universidad
             Container(
               height: 170,
               child: Image.asset("assets/logoUach.png"),
             ),
 
+            /// Caja vacia con altura de 30 p
             SizedBox(
               height: 30,
             ),
 
+            /// Muestra imagen con logo de la Facultad
             Container(
               height: 155,
               child: Image.asset("assets/logoIngenieria.png"),

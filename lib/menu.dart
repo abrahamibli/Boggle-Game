@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// Controla la Pantalla incial del juego
 class MenuScreen extends StatefulWidget {
@@ -17,12 +16,13 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Center(
         child: Column(
           children: <Widget>[
-            // Inicia lista de Widgets que aparecen en pantalla de Menu
             /// Coloca la imagen 'png' presente en /assets
             Container(
               width: 250,
               child: Image.asset('assets/BoggleBoard.png'),
             ),
+            
+            /// Muestra la palabra 'Boggle' al centro y despues de la imagen
             Text(
               'Boggle!',
               style: Theme.of(context).textTheme.title.copyWith(
@@ -53,6 +53,8 @@ class _MenuScreenState extends State<MenuScreen> {
               elevation: 20,
               color: Theme.of(context).accentColor,
             ),
+            
+            /// Coloca una caja vacia con altura 10 p
             SizedBox(
               height: 10,
             ),
@@ -79,7 +81,7 @@ class _MenuScreenState extends State<MenuScreen> {
               height: 10,
             ),
 
-            /// Inserta boton para salir de la App
+            /// Inserta boton 'acerca de' de la App
             RaisedButton.icon(
               icon: Icon(Icons.info_outline),
               label: Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Muestra instrucciones de juego
 class HelpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class HelpScreen extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
         child: ListView(
           children: [
+            /// Muestra las intrucciones basicas detalladas del juego
             Text(
               """Boggle es un juego de mesa cuyo objetivo es encontrar el mayor numero de palabras en el tablero dado, esta es una version un poco diferente al original.
             \nCada tablero cuenta con 25 letras (5x5) aleatorias y en el se pueden buscar las palabras de manera vertical, horizontal o en diagonales, esto en cualquier direccion.
