@@ -224,6 +224,8 @@ class _GameScreenState extends State<GameScreen> {
                           onPressed: () {
                             if (nTablero < 5) {
                               print("click it");
+                              _BoardState.checado = true;
+                              palUsuario = '';
 
                               /// incrementa variable [nTablero], y genera un tablero con
                               /// caracteres aleatorios nuevos

@@ -10,9 +10,16 @@ import 'package:boggle_game/menu.dart';
 import 'package:boggle_game/help.dart';
 import 'package:boggle_game/about.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Ejecuta la Boggle App
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+  runApp(MyApp());
+}
 
 /// Controla las 3 diferentes pantallas de la App y 
 /// define el diseño base
