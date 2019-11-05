@@ -165,23 +165,4 @@ class Tablero {
     numTab++;
   }
 
-  /// Regresa 'true' si el parametro [palabra] esta presente en el tablero.
-  /// 
-  /// Comprueba recursivamente los vecinos del caracter coincide con el 
-  /// caracter siguiente de la [palabra] hasta que termina
-  bool palabraExiste(String palabra, int pos, int x, int y) {
-    if(pos==palabra.length) return true;
-    if(letras[x][y] != palabra[pos]) return false;
-    for(int i=x-1; i<=x+1; i++) {
-      for(int j=y-1; j<=y+1; j++) {
-        if((i==x && j==y))
-          continue;
-        if(i>=0 && j>=0 && i<tamx && j<tamy) {
-          if(palabraExiste(palabra, pos + 1, i, j))
-            return true;
-        }
-      }
-    }
-    return false;
-  }
 }
