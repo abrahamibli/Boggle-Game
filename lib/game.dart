@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'boogle.dart';
 import 'package:flutter/foundation.dart';
 
@@ -20,12 +21,14 @@ class _GameScreenState extends State<GameScreen> {
   Tablero tablero; // Nuevo Tablero
   List<String> encontradas,
       encontradasTotales; // Lista palabras encontradas por el usuario
-  static double visi; // Controla animacion de texto cuando usuario encuentra palabra
+  static double
+      visi; // Controla animacion de texto cuando usuario encuentra palabra
   final TextEditingController text_field_clean =
       TextEditingController(); // Controlador que limpia TextField cuando usuario deja de escribir en él
-  static bool cargando; // Controla tiempo de carga del tablero cuando se inicia partida
+  static bool
+      cargando; // Controla tiempo de carga del tablero cuando se inicia partida
   static String palUsuario = ''; // Formada cuando se hace Tap en el tablero
-  Color colorBorde; // Verde si la palabra es correcta, Rojo en caso contrario 
+  Color colorBorde; // Verde si la palabra es correcta, Rojo en caso contrario
 
   /// Metodo que inicializa las variables utilizadas en esta clase [_GameScreenState]
   @override
@@ -49,6 +52,7 @@ class _GameScreenState extends State<GameScreen> {
   /// Invoca el metodo que inicializa el [trie] con las palabras del diccionario
   void initTrie() async {
     await trie.inicializar();
+
     /// Muestra una pantalla de carga cuando el trie esta llenando
     setState(() {
       cargando = false;
@@ -92,212 +96,158 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
+        leading: Icon(
+          Icons.close,
+          color: Theme.of(context).primaryColor,
+        ),
+        actions: <Widget>[
+          /// Boton que nos envia a la pantalla final de puntuacion
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, right: 10.0),
+            child: RaisedButton.icon(
+              /// Nos dirige a la pantalla inicial del juego
+              onPressed: () {
+                palUsuario = '';
+                Navigator.of(context).pushNamed('/end');
+              },
+              color: Theme.of(context).accentColor,
+              elevation: 0,
+              label: Text('Finalizar Partida',
+                  style: Theme.of(context)
+                      .textTheme
+                      .button
+                      .copyWith(fontSize: 13)),
+              icon: Icon(Icons.done),
+              shape: StadiumBorder(),
+            ),
+          ),
+        ],
         iconTheme: new IconThemeData(color: Theme.of(context).accentColor),
-        title: Row(
-          children: <Widget>[
-            /// Coloca el numero de tableros actuales de la partida en la AppBar
-            Text(
-              'Tablero: $nTablero',
-              style: TextStyle(color: Theme.of(context).accentColor),
-            ),
-
-            /// Caja vacia con ancho de 45 p
-            SizedBox(
-              width: 45,
-            ),
-
-            /// Coloca el puntaje actual del usuario en la AppBar
-            Text(
-              'Puntos: $puntos',
-              style: TextStyle(color: Theme.of(context).accentColor),
-            ),
-          ],
-          mainAxisSize: MainAxisSize.max,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            'Puntos: $puntos',
+            style: TextStyle(color: Theme.of(context).accentColor),
+          ),
         ),
         elevation: 0,
       ),
-      /// Agrega pantalla deslizante que muestra la lista con las palabras encontradas del tablero
-      drawer: Theme(
-        data: Theme.of(context)
-            .copyWith(canvasColor: Theme.of(context).primaryColor),
-        child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              /// Muestra el titulo de la pantalla deslizante
-              Container(
-                height: 90,
-                child: DrawerHeader(
-                  child: Text(
-                    'Palabras Encontradas',
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
-
-              /// Muestra cada palabra de la lista [encontradasTotales] en el cuerpo
-              /// de la pantalla deslizante
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0, top: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    encontradasTotales.length,
-                    (index) => Text(
-                      '- ${encontradasTotales[index][0].toUpperCase() + encontradasTotales[index].substring(1)}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .body2
-                          .copyWith(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              /// Muestra Texto animado cuando el usuario escribe una palabra
-              AnimatedOpacity(
-                child: Container(
-                  child: Text(
-                    '${puntosGanados > 0 ? 'Correcto, has ganado $puntosGanados puntos!' : 'Incorrecta o repetida, 0 puntos :C'}',
-                    style: Theme.of(context).textTheme.display1.copyWith(
-                          fontSize: 20,
-                        ),
-                  ),
-                ),
-                opacity: visi == 1.0 ? 1.0 : 0.0,
-                duration: Duration(seconds: 1),
-              ),
-
-              /// Caja vacia con altura de 30 p
-              SizedBox(
-                height: 30,
-              ),
-
-              /// Container del boton 'refrescar'
-              Container(
-                width: 250,
-                alignment: Alignment.bottomRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      "${5 - nTablero}",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 20.0,
-                            spreadRadius: 5.0,
-                            offset: Offset(7.0, 7.0),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: IconButton(
-                          color: Colors.white,
-                          icon: Icon(
-                            Icons.autorenew,
-                          ),
-                          iconSize: 20,
-                          tooltip: "refrescar tablero",
-                          onPressed: () {
-                            if (nTablero < 5) {
-                              print("click it");
-                              _BoardState.checado = true;
-                              palUsuario = '';
-
-                              /// incrementa variable [nTablero], y genera un tablero con
-                              /// caracteres aleatorios nuevos
-                              setState(() {
-                                nTablero++;
-                                encontradas.clear();
-                                colorBorde = Colors.transparent;
-                                tablero.crearTableroNuevo();
-                              });
-                            } else {
-                              null;
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              /// Container principal del tablero
-              Container(
-                width: 250,
-                height: 250,
-                child: cargando
-                    ? Center(child: CircularProgressIndicator())
-                    : Board(
-                        boardData: tablero.getTablero(),
-                        /// Funcion personalizada para que el TextField se actualice
-                        /// cada vez que se hace Tap en el tablero
-                        onClick: (letra) {
-                          setState(() {
-                            palUsuario += letra;
-                          });
-                        } 
-                      ),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      blurRadius: 20.0,
-                      spreadRadius: 5.0,
-                      offset: Offset(7.0, 7.0),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    topLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
-                  ),
-                ),
-              ),
-
-              /// Ordena tres elementos; Boton Rojo, TextField, Boton Verde
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        children: <Widget>[
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  /// Muestra el boton izquierdo al TextField
+                  SizedBox(
+                    height: 25,
+                  ),
+
+                  /// Muestra Texto animado cuando el usuario escribe una palabra
+                  AnimatedOpacity(
+                    child: Container(
+                      child: Text(
+                        '${puntosGanados > 0 ? 'Correcto, has ganado $puntosGanados puntos!' : 'Incorrecta o repetida, 0 puntos :C'}',
+                        style: Theme.of(context).textTheme.display1.copyWith(
+                              fontSize: 20,
+                            ),
+                      ),
+                    ),
+                    opacity: visi == 1.0 ? 1.0 : 0.0,
+                    duration: Duration(seconds: 1),
+                  ),
+
+                  /// Caja vacia con altura de 30 p
+                  SizedBox(
+                    height: 25,
+                  ),
+
+                  /// Container del boton 'refrescar'
                   Container(
-                    width: 42.5,
-                    height: 50,
-                    margin: EdgeInsets.only(top: 40),
+                    width: 250,
+                    alignment: Alignment.bottomRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          "${5 - nTablero}",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 20.0,
+                                spreadRadius: 5.0,
+                                offset: Offset(7.0, 7.0),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: IconButton(
+                              color: Colors.white,
+                              icon: Icon(
+                                Icons.autorenew,
+                              ),
+                              iconSize: 20,
+                              tooltip: "refrescar tablero",
+                              onPressed: () {
+                                if (nTablero < 5) {
+                                  print("click it");
+                                  _BoardState.checado = true;
+                                  palUsuario = '';
+
+                                  /// incrementa variable [nTablero], y genera un tablero con
+                                  /// caracteres aleatorios nuevos
+                                  setState(() {
+                                    nTablero++;
+                                    encontradas.clear();
+                                    colorBorde = Colors.transparent;
+                                    tablero.crearTableroNuevo();
+                                  });
+                                } else {
+                                  null;
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  /// Container principal del tablero
+                  Container(
+                    width: 250,
+                    height: 250,
+                    child: cargando
+                        ? Center(child: CircularProgressIndicator())
+                        : Board(
+                            boardData: tablero.getTablero(),
+
+                            /// Funcion personalizada para que el TextField se actualice
+                            /// cada vez que se hace Tap en el tablero
+                            onClick: (letra) {
+                              setState(() {
+                                palUsuario += letra;
+                              });
+                            }),
+                    padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.redAccent,
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black38,
@@ -309,129 +259,149 @@ class _GameScreenState extends State<GameScreen> {
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15),
                         topLeft: Radius.circular(15),
-                      ),
-                    ),
-                    /// Boton Rojo X
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: Icon(
-                        Icons.clear,
-                      ),
-                      iconSize: 20,
-                      tooltip: "borrar palabra",
-                      /// Borra el contenido del Textfield cuando se presiona
-                      onPressed: () {
-                        setState(() {
-                          palUsuario = '';
-                          _BoardState.checado = true;
-                        });
-                      },
-                    ),
-                  ),
-
-                  /// Textfield que se actualiza conforme se hace Tap en el tablero mostrando
-                  /// las cadenas que el usuario forma
-                  Container(
-                    margin: EdgeInsets.only(top: 40),
-                    width: 165,
-                    height: 50,
-                    child: Text(
-                      palUsuario,
-                      style: Theme.of(context)
-                          .textTheme
-                          .body2
-                          .copyWith(color: Colors.black, fontSize: 24),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 20.0,
-                          spreadRadius: 5.0,
-                          offset: Offset(7.0, 7.0),
-                        ),
-                      ],
-                      border: Border.all(color: colorBorde),
-                    ),
-                  ),
-
-                  /// Muestra el boton derecho al TextField
-                  Container(
-                    width: 42.5,
-                    height: 50,
-                    margin: EdgeInsets.only(top: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 20.0,
-                          spreadRadius: 5.0,
-                          offset: Offset(7.0, 7.0),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(15),
-                        topRight: Radius.circular(15),
                       ),
                     ),
-                    /// Boton Verde ./
-                    child: IconButton(
-                      color: Colors.white,
-                      icon: Icon(
-                        Icons.check,
+                  ),
+
+                  /// Ordena tres elementos; Boton Rojo, TextField, Boton Verde
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      /// Muestra el boton izquierdo al TextField
+                      Container(
+                        width: 42.5,
+                        height: 50,
+                        margin: EdgeInsets.only(top: 40),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 20.0,
+                              spreadRadius: 5.0,
+                              offset: Offset(7.0, 7.0),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            topLeft: Radius.circular(15),
+                          ),
+                        ),
+
+                        /// Boton Rojo X
+                        child: IconButton(
+                          color: Colors.white,
+                          icon: Icon(
+                            Icons.clear,
+                          ),
+                          iconSize: 20,
+                          tooltip: "borrar palabra",
+
+                          /// Borra el contenido del Textfield cuando se presiona
+                          onPressed: () {
+                            setState(() {
+                              palUsuario = '';
+                              _BoardState.checado = true;
+                            });
+                          },
+                        ),
                       ),
-                      iconSize: 20,
-                      tooltip: "verificar palabra",
-                      /// Verifica el contenido del Textfield cuando se presiona y limpia la palabra
-                      /// concatenada
-                      onPressed: () {
-                        setState(() {
-                          if (palUsuario != '') {
-                            _BoardState.checado = true;
-                            verificarPalabra(palUsuario);
-                            palUsuario = '';
-                          }
-                        });
-                      },
-                    ),
+
+                      /// Textfield que se actualiza conforme se hace Tap en el tablero mostrando
+                      /// las cadenas que el usuario forma
+                      Container(
+                        margin: EdgeInsets.only(top: 40),
+                        width: 165,
+                        height: 50,
+                        child: Text(
+                          palUsuario,
+                          style: Theme.of(context)
+                              .textTheme
+                              .body2
+                              .copyWith(color: Colors.black, fontSize: 24),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 20.0,
+                              spreadRadius: 5.0,
+                              offset: Offset(7.0, 7.0),
+                            ),
+                          ],
+                          border: Border.all(color: colorBorde),
+                        ),
+                      ),
+
+                      /// Muestra el boton derecho al TextField
+                      Container(
+                        width: 42.5,
+                        height: 50,
+                        margin: EdgeInsets.only(top: 40),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 20.0,
+                              spreadRadius: 5.0,
+                              offset: Offset(7.0, 7.0),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                          ),
+                        ),
+
+                        /// Boton Verde ./
+                        child: IconButton(
+                          color: Colors.white,
+                          icon: Icon(
+                            Icons.check,
+                          ),
+                          iconSize: 20,
+                          tooltip: "verificar palabra",
+
+                          /// Verifica el contenido del Textfield cuando se presiona y limpia la palabra
+                          /// concatenada
+                          onPressed: () {
+                            setState(() {
+                              if (palUsuario != '') {
+                                _BoardState.checado = true;
+                                verificarPalabra(palUsuario);
+                                palUsuario = '';
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  /// Caja vacia con altura de 70 p
+                  SizedBox(
+                    height: 60,
+                  ),
+
+                  /// Caja vacia con altura de 15 p
+                  SizedBox(
+                    height: 15,
                   ),
                 ],
+                mainAxisSize: MainAxisSize.min,
               ),
-
-              /// Caja vacia con altura de 70 p
-              SizedBox(
-                height: 60,
-              ),
-
-              /// Boton que nos envia a la pantalla final de puntuacion
-              RaisedButton.icon(
-                color: Theme.of(context).accentColor,
-                label: Text('Finalizar Partida',
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(fontSize: 20)),
-                icon: Icon(Icons.check),
-                onPressed: () {
-                  palUsuario = '';
-                  Navigator.of(context).pushNamed('/end');
-                },
-                shape: StadiumBorder(),
-                elevation: 12,
-              ),
-
-              /// Caja vacia con altura de 15 p
-              SizedBox(
-                height: 15,
-              ),
-            ],
-            mainAxisSize: MainAxisSize.min,
+            ),
           ),
-        ),
+          SlideUpPanel(
+            body: encontradasTotales,
+          ),
+        ],
       ),
     );
   }
@@ -492,24 +462,23 @@ class _BoardState extends State<Board> {
                       idxAnt == index + 6 ||
                       idxAnt == null) &&
                   idxAnt != index) vecino = true;
-                  setState(() {
-                    checado = false;
-                    if (borde[index] == 1.0 && vecino) {
-                      borde[index] = 2.5;
-                      letras[index] = FontWeight.w700;
-                      idxAnt = index;
-                      widget.onClick(widget.boardData[index]);
-                    } else if (borde[index] == 2.5 && vecino) {
-                      borde[index] = 4.0;
-                      letras[index] = FontWeight.bold;
-                      idxAnt = index;
-                      widget.onClick(widget.boardData[index]);
-                    } else if (vecino) {
-                      idxAnt = index;
-                      widget.onClick(widget.boardData[index]);
-                    }
-                  });
-                
+              setState(() {
+                checado = false;
+                if (borde[index] == 1.0 && vecino) {
+                  borde[index] = 2.5;
+                  letras[index] = FontWeight.w700;
+                  idxAnt = index;
+                  widget.onClick(widget.boardData[index]);
+                } else if (borde[index] == 2.5 && vecino) {
+                  borde[index] = 4.0;
+                  letras[index] = FontWeight.bold;
+                  idxAnt = index;
+                  widget.onClick(widget.boardData[index]);
+                } else if (vecino) {
+                  idxAnt = index;
+                  widget.onClick(widget.boardData[index]);
+                }
+              });
             },
             child: Container(
               width: 37,
@@ -611,23 +580,119 @@ class EndScreen extends StatelessWidget {
               /// Container del boton que nos envia al menu principal
               Container(
                 child: RaisedButton.icon(
-                /// Nos dirige a la pantalla inicial del juego
-                onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
-                },
-                color: Theme.of(context).accentColor,
-                elevation: 20,
-                label: Text('Regresar al Menu Principal',
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(fontSize: 20)),
-                icon: Icon(Icons.arrow_back),
-                shape: StadiumBorder(),
-              )),
+                  /// Nos dirige a la pantalla inicial del juego
+                  onPressed: () {
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
+                  color: Theme.of(context).accentColor,
+                  elevation: 20,
+                  label: Text('Regresar al Menu Principal',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          .copyWith(fontSize: 20)),
+                  icon: Icon(Icons.arrow_back),
+                  shape: StadiumBorder(),
+                ),
+              ),
             ],
             mainAxisSize: MainAxisSize.min,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SlideUpPanel extends StatefulWidget {
+  final String _title;
+  final List _body;
+
+  SlideUpPanel({Key key, title, body})
+      : _body = body,
+        _title = title,
+        super(key: key);
+
+  @override
+  _SlideUpPanelState createState() => _SlideUpPanelState(_body, _title);
+}
+
+class _SlideUpPanelState extends State<SlideUpPanel> {
+  String _title;
+  List _body;
+
+  _SlideUpPanelState(this._body, this._title);
+
+  @override
+  Widget build(BuildContext context) {
+    BorderRadiusGeometry radius = BorderRadius.only(
+        topRight: Radius.circular(24), topLeft: Radius.circular(24));
+    return SlidingUpPanel(
+      backdropOpacity: .1,
+      backdropEnabled: true,
+      borderRadius: radius,
+      minHeight: 50,
+      maxHeight: 300,
+      color: Theme.of(context).primaryColor,
+      panel: Column(
+        children: <Widget>[
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: radius,
+            ),
+            child: Center(
+              child: Text('Palabras Encontradas',
+                  style: Theme.of(context).textTheme.title),
+            ),
+          ),
+          Container(
+            height: 250,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                /// Muestra cada palabra de la lista [encontradasTotales] en el cuerpo
+                /// de la pantalla deslizante
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: List.generate(
+                      _body.length,
+                      (index) => Card(
+                        color: Colors.white,
+                        child: Container(
+                          height: 30,
+                          width: 200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${_body[index][0].toUpperCase() + _body[index].substring(1)}',
+                            style: Theme.of(context).textTheme.body2.copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      collapsed: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: radius,
+        ),
+        child: Center(
+          child: Text('Palabras Encontradas',
+              style: Theme.of(context).textTheme.title),
         ),
       ),
     );
