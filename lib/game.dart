@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'boogle.dart';
+import 'hashtable.dart';
 import 'package:flutter/foundation.dart';
 
 /// Controla la pantalla del tablero
@@ -103,7 +104,7 @@ class _GameScreenState extends State<GameScreen> {
         actions: <Widget>[
           /// Boton que nos envia a la pantalla final de puntuacion
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, right: 10.0),
+            padding: const EdgeInsets.only(top: 8.0, right: 8.0),
             child: RaisedButton.icon(
               /// Nos dirige a la pantalla inicial del juego
               onPressed: () {
@@ -112,11 +113,13 @@ class _GameScreenState extends State<GameScreen> {
               },
               color: Theme.of(context).accentColor,
               elevation: 0,
-              label: Text('Finalizar Partida',
-                  style: Theme.of(context)
-                      .textTheme
-                      .button
-                      .copyWith(fontSize: 13)),
+              label: Text(
+                'Finalizar Partida',
+                style: Theme.of(context).textTheme.button.copyWith(
+                      fontSize: 13,
+                      letterSpacing: -.4,
+                    ),
+              ),
               icon: Icon(Icons.done),
               shape: StadiumBorder(),
             ),
@@ -127,7 +130,10 @@ class _GameScreenState extends State<GameScreen> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
             'Puntos: $puntos',
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
+              letterSpacing: -.4,
+            ),
           ),
         ),
         elevation: 0,
