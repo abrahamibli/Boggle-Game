@@ -9,6 +9,7 @@ import 'package:boggle_game/game.dart';
 import 'package:boggle_game/menu.dart';
 import 'package:boggle_game/help.dart';
 import 'package:boggle_game/about.dart';
+import 'package:boggle_game/scores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/help' : (context) => HelpScreen(), // Pantalla que muestra las reglas del juego
         '/end' : (context) => EndScreen(), // Pantalla que muestra los resultados
         '/about' : (context) => AboutScreen(), // Pantalla que 
+        '/scores' : (context) => ScoresScreen(),
       },
       initialRoute: '/', // Define el Menu como la pantalla principal
     );

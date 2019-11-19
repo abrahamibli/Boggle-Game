@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Controla la Pantalla incial del juego
-class MenuScreen extends StatefulWidget {
-  MenuScreen({Key key}) : super(key: key);
-  @override
-  _MenuScreenState createState() => _MenuScreenState();
-}
-
 /// Define el Widget que muestra el Menu del juego
-class _MenuScreenState extends State<MenuScreen> {
+class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,20 +27,41 @@ class _MenuScreenState extends State<MenuScreen> {
 
             /// Coloca una caja vacia con altura 75 p
             SizedBox(
-              height: 50,
+              height: 40,
             ),
 
             /// Inserta boton responsable de iniciar partida
             RaisedButton.icon(
               icon: Icon(Icons.play_arrow),
               label: Text(
-                '   Jugar      ',
+                '     Jugar         ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
               onPressed: () {
                 print('nueva partida');
                 Navigator.of(context).pushNamed('/game');
+              },
+              shape: StadiumBorder(),
+              elevation: 20,
+              color: Theme.of(context).accentColor,
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            /// Inserta boton responsable de entrar a pantalla ayuda
+            RaisedButton.icon(
+              icon: Icon(Icons.score),
+              label: Text(
+                'Puntuaciones',
+                style:
+                    Theme.of(context).textTheme.button.copyWith(fontSize: 20),
+              ),
+              onPressed: () {
+                print('puntuacion');
+                Navigator.of(context).pushNamed('/scores');
               },
               shape: StadiumBorder(),
               elevation: 20,
@@ -63,7 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
             RaisedButton.icon(
               icon: Icon(Icons.help_outline),
               label: Text(
-                '  Ayuda      ',
+                '     Ayuda        ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
@@ -85,7 +99,7 @@ class _MenuScreenState extends State<MenuScreen> {
             RaisedButton.icon(
               icon: Icon(Icons.info_outline),
               label: Text(
-                'Acerca de ',
+                '  Acerca de    ',
                 style:
                     Theme.of(context).textTheme.button.copyWith(fontSize: 20),
               ),
@@ -99,7 +113,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
             /// Coloca una caja vacia con altura 75 p
             SizedBox(
-              height: 25,
+              height: 23,
             ),
           ],
           mainAxisSize: MainAxisSize.min,

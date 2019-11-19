@@ -1,7 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'boogle.dart';
-import 'hashtable.dart';
 import 'package:flutter/foundation.dart';
 
 /// Controla la pantalla del tablero
@@ -512,7 +514,41 @@ class _BoardState extends State<Board> {
 }
 
 /// Controla la pantalla final de puntuacion del usuario
-class EndScreen extends StatelessWidget {
+class EndScreen extends StatefulWidget {
+  @override
+  _EndScreenState createState() => _EndScreenState();
+}
+
+class _EndScreenState extends State<EndScreen> {
+  List _json;
+  TextEditingController _nameController;
+
+  @override
+  void initState() {
+    _nameController = TextEditingController();
+    super.initState();
+  }
+
+  _readScores() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    File file = File('${dir.path}/scores.json');
+    _json = jsonDecode(await file.readAsString());
+  }
+
+  _writeScore() async {
+    try {
+      Directory dir = await getApplicationDocumentsDirectory();
+      File file = File('${dir.path}/scores.json');
+      _json.add({'nombre': _nameController, 'score': _GameScreenState.puntos});
+      String jsonText = jsonEncode(_json);
+      await file.writeAsString(jsonText);
+    } catch (e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Error al guardar datos'),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -538,7 +574,7 @@ class EndScreen extends StatelessWidget {
 
               /// Caja vacia con altura de 40 p
               SizedBox(
-                height: 40,
+                height: 20,
               ),
 
               /// Container que muestra texto simple
@@ -580,7 +616,46 @@ class EndScreen extends StatelessWidget {
 
               /// Caja vacia con altura de 40 p
               SizedBox(
-                height: 40,
+                height: 20,
+              ),
+
+              Container(
+                padding: EdgeInsets.only(bottom: 7, left: 25, right: 25),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      blurRadius: 20.0,
+                      spreadRadius: 5.0,
+                      offset: Offset(7.0, 7.0),
+                    ),
+                  ],
+                ),
+                width: 265,
+                child: TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    hintText: 'Escribe tu nombre aqui',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    hintStyle: Theme.of(context).textTheme.title.copyWith(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                  onSubmitted: (String nombre) {},
+                ),
+              ),
+
+              /// Caja vacia con altura de 40 p
+              SizedBox(
+                height: 20,
               ),
 
               /// Container del boton que nos envia al menu principal
@@ -588,16 +663,38 @@ class EndScreen extends StatelessWidget {
                 child: RaisedButton.icon(
                   /// Nos dirige a la pantalla inicial del juego
                   onPressed: () {
+                    if(_nameController != null) {
+                      _readScores();
+                      _writeScore();
+                    }else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Escribe un nombre'),
+                          content: Text(
+                              'Necesitas escribir tu nombre para guardar la puntuacion!'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Ok'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                        barrierDismissible: false,
+                      );
+                    }
                     Navigator.popUntil(context, ModalRoute.withName('/'));
                   },
                   color: Theme.of(context).accentColor,
                   elevation: 20,
-                  label: Text('Regresar al Menu Principal',
+                  label: Text('Guardar Puntuacion',
                       style: Theme.of(context)
                           .textTheme
                           .button
                           .copyWith(fontSize: 20)),
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(Icons.score),
                   shape: StadiumBorder(),
                 ),
               ),

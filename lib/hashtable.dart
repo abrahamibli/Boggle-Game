@@ -2,69 +2,74 @@ import 'dart:core';
 
 class HashTable<K, T> {
   List<_Hash> _list;
-  int _capacity, _index, _size=0;
+  int _capacity, _positionConsulted, _size = 0;
   Function hashing;
 
   HashTable({capacity = 11, this.hashing = _getHash}) : _capacity = capacity {
     _list = List<_Hash>(_capacity);
   }
 
-  void put(K key, T value) {
-    bool inserted = false;
-    int _iterations = 0;
-    _index = hashing(key, _capacity);
-    
-    do{
-      if(_list[_index] == null) {
-        _list[_index] = _Hash.data(key, value);
-        inserted = true;
-        _size++;
-        print('${_list[_index]._k}  $_index');
-        if((_size / _capacity) > 0.75) 
-          _rehash();
-      }else {
-        _index++;
-        if(_index>=_capacity)
-          _index=0;
-      }
-      _iterations++;
-    }while(!inserted || _iterations >= _capacity);
-    if(!inserted)
-      print('HashTable is full');
-  }
-
-  getValue(K key) {
-    int _iterations = 0;
-    _index = hashing(key, _capacity); 
-    
-    do{
-      if(_list[_index] != null) {
-        if(_list[_index].k == key) {
-          return _list[_index].t;
-        }else {
-          _index++;
-          if(_index>=_capacity)
-            _index=0;
-        }
-      }else {
-        return null;
-      }
-      _iterations++;
-    }while(_iterations <= _capacity);
-    return null;
-  }
-
-  void remove(K key) {
-    getValue(key);
-    _list[_index] = null;
-    _size--;
+  //TODO***********************
+  HashTable.fromJson(Map<String, dynamic> json) {
+    _list = List<_Hash>(json.length);
+    json.forEach((key, value) {
+      _Hash haux = _Hash.data(key, value);
+      _list.add(haux);
+    });
   }
 
   get size => _size;
 
+  bool contains(K key) {
+    int _iterations = 0;
+    _positionConsulted = hashing(key, _capacity); 
+    
+    do{
+      if(_list[_positionConsulted] != null) {
+        if(_list[_positionConsulted].k == key) {
+          return true;
+        }else {
+          _positionConsulted++;
+          if(_positionConsulted == _capacity)
+            _positionConsulted = 0;
+        }
+      }else {
+        return false;
+      }
+      _iterations++;
+    }while(_iterations <= _capacity);
+    return false;
+  }
+
+  void put(K key, T value) {
+    if(contains(key)) {
+      print('The Key already exist');
+    }else {
+      _list[_positionConsulted] = _Hash.data(key, value);
+      _size++;
+      if((_size / _capacity) > 0.75) 
+          _rehash();
+    }
+  }
+
+  getValue(K key) {
+    if(contains(key)) {
+      return _list[_positionConsulted].t;
+    }else {
+      return null;
+    }
+  }
+
+  void remove(K key) {
+    if(contains(key)) {
+      _list[_positionConsulted] = null;
+      _size--;
+    }
+  }
+
   static int _getHash(String s, int capacity) {
     int ascii = 0;
-    for(int i = 0;i < s.length;i++) {
+    for(int i = 0; i < s.length; i++) {
       ascii += s.codeUnitAt(i);
     }
     return ascii%capacity;
@@ -72,27 +77,23 @@ class HashTable<K, T> {
 
   void _rehash() {
     _capacity = _primoCercano(_size*2);
-    int index;
+    int auxIndex;
     bool inserted;
 
     List<_Hash> newList = List<_Hash>(_capacity);
     _list.forEach((hash) {
       if(hash != null) {
-        index = _getHash(hash._k, _capacity);
+        auxIndex = hashing(hash.k, _capacity);
         inserted = false;
         do{
-          if(newList[index] == null) {
-            print('$index    ${hash._k}');
-            newList[index] = hash;
+          if(newList[auxIndex] == null) {
+            newList[auxIndex] = hash;
             inserted = true;
-          }else {
-            print('$index    ${hash._k}');
-            index++;
-          }
+          }else
+            auxIndex++;
         }while(!inserted);
       }
     });
-    print(newList[13]);
     _list = newList;
   }
 
@@ -102,7 +103,7 @@ class HashTable<K, T> {
 
     while(primo == 0) {
       divide = false;
-      for(int n = 2;n < value;n++) {
+      for(int n = 2; n < value; n++) {
         if(value % n == 0) {
           divide = true;
           value++;
@@ -114,6 +115,9 @@ class HashTable<K, T> {
     }
     return primo;
   }
+
+  //TODO***************************
+  Map<String, dynamic> toJson() => _list as Map;
 
   @override
   String toString() {
@@ -155,7 +159,7 @@ class _Hash {
 }
 
 main(List<String> args) {
-  HashTable x = HashTable<String, double>();
+  HashTable x = HashTable();
 
   x.put('U', 9.0);
   x.put('A', 100.0);
@@ -167,10 +171,19 @@ main(List<String> args) {
   x.put('ddde', 8.0);
   x.put('eded', 444.0);
   x.put('dededd', 2823.22);
+  x.put("key", 22.2);
   print(x);
-  print(x.getValue('Sebas'));
-  print(x.getValue('ddd'));
-  x.remove('ddd');
-  print(x.getValue('ede'));
+  print(x.size);
+  print(x.contains("U"));
+  x.put("Mondel", 11);
+  print(x.getValue("U"));
   print(x);
+  print(x.getValue("As"));
+  print(x.size);
+  x.remove("key");
+  print(x.size);
+  print(x);
+
+
+
 }
