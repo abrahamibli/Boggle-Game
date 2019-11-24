@@ -1,3 +1,4 @@
+import 'package:boggle_game/hashtable.dart';
 import 'package:flutter/material.dart';
 
 /// Define el Widget que muestra el Menu del juego

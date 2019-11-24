@@ -117,7 +117,9 @@ class HashTable<K, T> {
   }
 
   //TODO***************************
-  Map<String, dynamic> toJson() => _list as Map;
+  Map<String, dynamic> toJson() => {
+    
+  };
 
   @override
   String toString() {
@@ -156,34 +158,4 @@ class _Hash {
 
   @override
   String toString() => '$_k: $_t';
-}
-
-main(List<String> args) {
-  HashTable x = HashTable();
-
-  x.put('U', 9.0);
-  x.put('A', 100.0);
-  x.put('Sebas', 4.20);
-  x.put('Carlos', 7.77);
-  x.put('ddd', 8.0);
-  x.put('ede', 444.0);
-  x.put('deded', 2823.22);
-  x.put('ddde', 8.0);
-  x.put('eded', 444.0);
-  x.put('dededd', 2823.22);
-  x.put("key", 22.2);
-  print(x);
-  print(x.size);
-  print(x.contains("U"));
-  x.put("Mondel", 11);
-  print(x.getValue("U"));
-  print(x);
-  print(x.getValue("As"));
-  print(x.size);
-  x.remove("key");
-  print(x.size);
-  print(x);
-
-
-
 }

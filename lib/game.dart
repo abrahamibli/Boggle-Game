@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:boggle_game/hashtable.dart';
+import 'package:boggle_game/scoreFIle.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'boogle.dart';
 import 'package:flutter/foundation.dart';
@@ -520,32 +523,38 @@ class EndScreen extends StatefulWidget {
 }
 
 class _EndScreenState extends State<EndScreen> {
-  List _json;
   TextEditingController _nameController;
+  List<Scores> _scores;
 
   @override
   void initState() {
     _nameController = TextEditingController();
+    _scores = List<Scores>();
+    readScores();
     super.initState();
   }
 
-  _readScores() async {
+  readScores() async {
     Directory dir = await getApplicationDocumentsDirectory();
     File file = File('${dir.path}/scores.json');
-    _json = jsonDecode(await file.readAsString());
+    List json = jsonDecode(await file.readAsString());
+    List<Scores> auxScores = [];
+    for(var score in json) {
+      auxScores.add(Scores.fromJson(score));
+    }
+    setState(() => _scores = auxScores);
   }
 
-  _writeScore() async {
+  writeScore() async {
     try {
       Directory dir = await getApplicationDocumentsDirectory();
       File file = File('${dir.path}/scores.json');
-      _json.add({'nombre': _nameController, 'score': _GameScreenState.puntos});
-      String jsonText = jsonEncode(_json);
+      String jsonText = jsonEncode(_scores);
       await file.writeAsString(jsonText);
     } catch (e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      /*Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('Error al guardar datos'),
-      ));
+      ));*/
     }
   }
 
@@ -649,7 +658,9 @@ class _EndScreenState extends State<EndScreen> {
                           fontWeight: FontWeight.normal,
                         ),
                   ),
-                  onSubmitted: (String nombre) {},
+                  onSubmitted: (String nombre) {
+                    print(_nameController.text);
+                  },
                 ),
               ),
 
@@ -663,16 +674,17 @@ class _EndScreenState extends State<EndScreen> {
                 child: RaisedButton.icon(
                   /// Nos dirige a la pantalla inicial del juego
                   onPressed: () {
-                    if(_nameController != null) {
-                      _readScores();
-                      _writeScore();
+                    if(_nameController.text != '') {      
+                      _scores.add(Scores(_nameController.text, _GameScreenState.puntos));
+                      writeScore();      
+                      print(_scores); 
                     }else {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Escribe un nombre'),
+                          title: Text('Escribe un nombre!'),
                           content: Text(
-                              'Necesitas escribir tu nombre para guardar la puntuacion!'),
+                              'Necesitas escribir tu nombre para guardar la puntuacion'),
                           actions: <Widget>[
                             FlatButton(
                               child: Text('Ok'),
