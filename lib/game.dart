@@ -535,14 +535,19 @@ class _EndScreenState extends State<EndScreen> {
   }
 
   readScores() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    File file = File('${dir.path}/scores.json');
-    List json = jsonDecode(await file.readAsString());
-    List<Scores> auxScores = [];
-    for(var score in json) {
-      auxScores.add(Scores.fromJson(score));
+    try {
+      Directory dir = await getApplicationDocumentsDirectory();
+      File file = File('${dir.path}/scores.json');
+      List json = jsonDecode(await file.readAsString());
+      List<Scores> auxScores = [];
+      for (var score in json) {
+        auxScores.add(Scores.fromJson(score));
+      }
+      setState(() => _scores = auxScores);
+    } catch (e) {
+      writeScore();
+      readScores();
     }
-    setState(() => _scores = auxScores);
   }
 
   writeScore() async {
@@ -551,11 +556,7 @@ class _EndScreenState extends State<EndScreen> {
       File file = File('${dir.path}/scores.json');
       String jsonText = jsonEncode(_scores);
       await file.writeAsString(jsonText);
-    } catch (e) {
-      /*Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('Error al guardar datos'),
-      ));*/
-    }
+    } catch (e) {}
   }
 
   @override
@@ -567,151 +568,165 @@ class _EndScreenState extends State<EndScreen> {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              /// Container que muestra un texto simple
-              Container(
-                child: Text(
-                  'Juego Finalizado!',
-                  style: Theme.of(context)
-                      .textTheme
-                      .display1
-                      .copyWith(fontSize: 42),
-                ),
-              ),
-
-              /// Caja vacia con altura de 40 p
-              SizedBox(
-                height: 20,
-              ),
-
-              /// Container que muestra texto simple
-              Container(
-                child: Text('con', style: Theme.of(context).textTheme.display1),
-              ),
-
-              /// Container que imprime el puntaje en el centro de la pantalla con una fuente grande
-              Container(
-                  child: Text(
-                '${_GameScreenState.puntos}',
-                style: Theme.of(context).textTheme.display4.copyWith(
-                      fontSize: 200,
-                      color: Theme.of(context).accentColor,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: -20,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  /// Container que muestra un texto simple
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Container(
+                      child: Text(
+                        'Juego Finalizado!',
+                        style: Theme.of(context)
+                            .textTheme
+                            .display1
+                            .copyWith(fontSize: 42),
+                      ),
                     ),
-              )),
-
-              /// Container que imprime los tableros usados por el usuario
-              Container(
-                  child: Text(
-                'puntos y ${_GameScreenState.nTablero} ${(_GameScreenState.nTablero == 1) ? 'tablero' : 'tableros'}',
-                style: Theme.of(context).textTheme.display1,
-              )),
-
-              /// Caja vacia con altura de 10 p
-              SizedBox(
-                height: 10,
-              ),
-
-              /// Container que imprime el numero de palabras faltantes a encontrar en el diccionario
-              Container(
-                  child: Text(
-                '${_GameScreenState.nDiccionario} palabras faltantes de encontrar...',
-                style:
-                    Theme.of(context).textTheme.display1.copyWith(fontSize: 15),
-              )),
-
-              /// Caja vacia con altura de 40 p
-              SizedBox(
-                height: 20,
-              ),
-
-              Container(
-                padding: EdgeInsets.only(bottom: 7, left: 25, right: 25),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      blurRadius: 20.0,
-                      spreadRadius: 5.0,
-                      offset: Offset(7.0, 7.0),
-                    ),
-                  ],
-                ),
-                width: 265,
-                child: TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    hintText: 'Escribe tu nombre aqui',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    hintStyle: Theme.of(context).textTheme.title.copyWith(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.normal,
-                        ),
                   ),
-                  onSubmitted: (String nombre) {
-                    print(_nameController.text);
-                  },
-                ),
-              ),
 
-              /// Caja vacia con altura de 40 p
-              SizedBox(
-                height: 20,
-              ),
+                  /// Caja vacia con altura de 40 p
+                  SizedBox(
+                    height: 20,
+                  ),
 
-              /// Container del boton que nos envia al menu principal
-              Container(
-                child: RaisedButton.icon(
-                  /// Nos dirige a la pantalla inicial del juego
-                  onPressed: () {
-                    if(_nameController.text != '') {      
-                      _scores.add(Scores(_nameController.text, _GameScreenState.puntos));
-                      writeScore();      
-                      print(_scores); 
-                    }else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Escribe un nombre!'),
-                          content: Text(
-                              'Necesitas escribir tu nombre para guardar la puntuacion'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('Ok'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                  /// Container que muestra texto simple
+                  Container(
+                    child: Text('con',
+                        style: Theme.of(context).textTheme.display1),
+                  ),
+
+                  /// Container que imprime el puntaje en el centro de la pantalla con una fuente grande
+                  Container(
+                      child: Text(
+                    '${_GameScreenState.puntos}',
+                    style: Theme.of(context).textTheme.display4.copyWith(
+                          fontSize: 200,
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: -20,
                         ),
-                        barrierDismissible: false,
-                      );
-                    }
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                  },
-                  color: Theme.of(context).accentColor,
-                  elevation: 20,
-                  label: Text('Guardar Puntuacion',
-                      style: Theme.of(context)
-                          .textTheme
-                          .button
-                          .copyWith(fontSize: 20)),
-                  icon: Icon(Icons.score),
-                  shape: StadiumBorder(),
-                ),
+                  )),
+
+                  /// Container que imprime los tableros usados por el usuario
+                  Container(
+                      child: Text(
+                    'puntos y ${_GameScreenState.nTablero} ${(_GameScreenState.nTablero == 1) ? 'tablero' : 'tableros'}',
+                    style: Theme.of(context).textTheme.display1,
+                  )),
+
+                  /// Caja vacia con altura de 10 p
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  /// Container que imprime el numero de palabras faltantes a encontrar en el diccionario
+                  Container(
+                      child: Text(
+                    '${_GameScreenState.nDiccionario} palabras faltantes de encontrar...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .display1
+                        .copyWith(fontSize: 15),
+                  )),
+
+                  /// Caja vacia con altura de 40 p
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.only(bottom: 7, left: 25, right: 25),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 20.0,
+                          spreadRadius: 5.0,
+                          offset: Offset(7.0, 7.0),
+                        ),
+                      ],
+                    ),
+                    width: 265,
+                    child: TextField(
+                      controller: _nameController,
+                      style: TextStyle(color: Theme.of(context).accentColor, fontSize: 20),
+                      decoration: InputDecoration(
+                        hintText: 'Escribe tu nombre aqui',
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        hintStyle: Theme.of(context).textTheme.title.copyWith(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.normal,
+                            ),
+                      ),
+                    ),
+                  ),
+
+                  /// Caja vacia con altura de 40 p
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  /// Container del boton que nos envia al menu principal
+                  Container(
+                    child: RaisedButton.icon(
+                      /// Nos dirige a la pantalla inicial del juego
+                      onPressed: () {
+                        if (_nameController.text != '') {
+                          _scores.add(Scores(
+                              _nameController.text, _GameScreenState.puntos));
+                          writeScore();
+                          print(_scores);
+                          Navigator.popUntil(context, ModalRoute.withName('/'));
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Escribe un nombre!'),
+                              content: Text(
+                                  'Necesitas escribir tu nombre para guardar la puntuacion'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }
+                      },
+                      color: Theme.of(context).accentColor,
+                      elevation: 20,
+                      label: Text('Guardar Puntuacion',
+                          style: Theme.of(context)
+                              .textTheme
+                              .button
+                              .copyWith(fontSize: 20)),
+                      icon: Icon(Icons.score),
+                      shape: StadiumBorder(),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+                mainAxisSize: MainAxisSize.min,
               ),
-            ],
-            mainAxisSize: MainAxisSize.min,
+            ),
           ),
         ),
       ),
