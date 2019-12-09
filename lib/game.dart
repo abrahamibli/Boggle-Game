@@ -638,6 +638,7 @@ class _EndScreenState extends State<EndScreen> {
                     height: 20,
                   ),
 
+                  /// TextField para ingresar nombre
                   Container(
                     padding: EdgeInsets.only(bottom: 7, left: 25, right: 25),
                     decoration: BoxDecoration(
