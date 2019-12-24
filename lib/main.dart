@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 
 /// Ejecuta la Boggle App
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
