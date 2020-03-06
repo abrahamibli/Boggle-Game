@@ -1,6 +1,7 @@
 # boggle_game
 
-A new Flutter project.
+Juego basado en el juego de mesa con el mismo nombre con el objetivo de formar la mayor cantidad de palabras en un tablero.<br>
+Desarrollado en Dart con Flutter y utilizando Tries.
 
 ## Getting Started
 
